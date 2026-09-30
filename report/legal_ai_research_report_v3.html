@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>法律AI智能体架构调研与落地决策报告 · 学生团队版 V3（2026-09，郑州）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2316263b'/%3E%3Cpath d='M9 8h14v3H9zM9 14h14v3H9zM9 20h9v3H9z' fill='%23c79a3f'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@500;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>window.__mermaidCdnFallback=function(){var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js';document.head.appendChild(s);};</script>
+<style>
+:root{
+  --bg:#f4f5f1; --surface:#ffffff; --surface-2:#eceee8; --ink:#1b2634; --ink-2:#3d4c60;
+  --muted:#6d7887; --line:#dde1d9; --line-strong:#c9cfc4;
+  --navy:#16263b; --navy-2:#1f3a57; --navy-3:#2b4a6f;
+  --accent:#c79a3f; --accent-ink:#8a6a24; --accent-soft:#f3e9d2;
+  --danger:#9b2c2c; --danger-bg:#f9ecec; --danger-line:#e3c2c2;
+  --tip:#2f6b4f; --tip-bg:#ecf4ef; --tip-line:#c4dccb;
+  --warn:#9a6b1e; --warn-bg:#faf3e2; --warn-line:#e6d4a8;
+  --note:#2b4a6f; --note-bg:#edf2f8; --note-line:#c8d6e6;
+  --sidebar-bg:#142235; --sidebar-ink:#c4cddb; --sidebar-ink-dim:#7e8da3;
+  --shadow:0 1px 2px rgba(20,34,53,.05),0 8px 28px rgba(20,34,53,.06);
+}
+[data-theme="dark"]{
+  --bg:#0e151f; --surface:#16202d; --surface-2:#1d2938; --ink:#d7dee8; --ink-2:#b3bfce;
+  --muted:#8595a9; --line:#283547; --line-strong:#37475d;
+  --navy:#e8eef6; --navy-2:#cdd9e8; --navy-3:#a7bacd;
+  --accent:#d8ac52; --accent-ink:#d8ac52; --accent-soft:#2a2415;
+  --danger:#e08a8a; --danger-bg:#2c1a1c; --danger-line:#5a2f31;
+  --tip:#7fc49f; --tip-bg:#15241c; --tip-line:#2c4a3a;
+  --warn:#e0b868; --warn-bg:#2a2212; --warn-line:#4d3e1f;
+  --note:#8fb3dd; --note-bg:#152030; --note-line:#27405e;
+  --sidebar-bg:#0b121d; --sidebar-ink:#c4cddb; --sidebar-ink-dim:#6e7d93;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;scroll-padding-top:20px;}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans SC",-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased;}
+b,strong{font-weight:700;}
+.num{font-variant-numeric:tabular-nums;letter-spacing:-.01em;}
+a{color:var(--note);}
+sup a{color:var(--accent-ink);font-weight:600;text-decoration:none;font-size:.72em;}
+[data-theme="dark"] sup a{color:var(--accent);}
+sup a:hover{text-decoration:underline;}
+/* progress */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:200;transition:width .08s linear;}
+#progressPct{position:fixed;top:10px;right:16px;z-index:200;font-size:11px;color:var(--muted);
+  background:var(--surface);border:1px solid var(--line);padding:2px 8px;border-radius:20px;font-variant-numeric:tabular-nums;}
+/* top mobile bar */
+#mobilebar{position:fixed;top:0;left:0;right:0;height:52px;background:var(--sidebar-bg);color:#fff;
+  display:none;align-items:center;gap:12px;padding:0 14px;z-index:150;}
+#mobilebar .mtitle{font-size:14px;letter-spacing:.02em;opacity:.9;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#hamburger{width:40px;height:40px;border:none;background:transparent;color:#fff;cursor:pointer;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;}
+#hamburger span{display:block;width:20px;height:2px;background:#fff;border-radius:2px;}
+/* sidebar */
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:296px;background:var(--sidebar-bg);color:var(--sidebar-ink);
+  display:flex;flex-direction:column;z-index:160;transition:transform .28s ease;}
+.side-brand{padding:26px 22px 18px;border-bottom:1px solid rgba(255,255,255,.08);}
+.side-brand .k{font-size:11px;letter-spacing:.22em;color:var(--accent);text-transform:uppercase;}
+.side-brand h1{font-family:"Noto Serif SC",serif;font-size:18px;margin:8px 0 4px;color:#fff;font-weight:700;line-height:1.4;}
+.side-brand p{font-size:12px;margin:0;color:var(--sidebar-ink-dim);line-height:1.6;}
+.side-search{padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.08);}
+.side-search input{width:100%;padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);color:#fff;font-size:13px;outline:none;}
+.side-search input::placeholder{color:var(--sidebar-ink-dim);}
+#tocnav{flex:1;overflow-y:auto;padding:10px 10px 30px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.15) transparent;}
+#tocnav::-webkit-scrollbar{width:6px;}#tocnav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:3px;}
+.toc-chap{margin:2px 0;}
+.toc-row{display:flex;align-items:center;}
+.toc-link{flex:1;display:block;padding:7px 10px;font-size:13.5px;color:var(--sidebar-ink);text-decoration:none;border-radius:7px;line-height:1.4;}
+.toc-link .tnum{display:inline-block;font-size:11px;color:var(--sidebar-ink-dim);width:26px;font-variant-numeric:tabular-nums;}
+.toc-toggle{width:26px;height:28px;border:none;background:transparent;color:var(--sidebar-ink-dim);cursor:pointer;font-size:11px;border-radius:6px;}
+.toc-toggle:hover{background:rgba(255,255,255,.08);}
+.toc-sub{display:none;margin:2px 0 6px 18px;border-left:1px solid rgba(255,255,255,.12);padding-left:8px;}
+.toc-chap.open .toc-sub{display:block;}
+.toc-sub a{display:block;padding:5px 10px;font-size:12.5px;color:var(--sidebar-ink-dim);text-decoration:none;border-radius:6px;line-height:1.45;}
+.toc-sub a:hover{color:#fff;}
+.toc-link.active,.toc-sub a.active{color:#fff;background:rgba(199,154,63,.18);}
+.toc-link.active{box-shadow:inset 2px 0 0 var(--accent);}
+.side-foot{padding:14px 20px;border-top:1px solid rgba(255,255,255,.08);font-size:11.5px;color:var(--sidebar-ink-dim);display:flex;align-items:center;justify-content:space-between;}
+#themeBtn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#fff;border-radius:20px;padding:5px 12px;font-size:12px;cursor:pointer;}
+#scrim{position:fixed;inset:0;background:rgba(10,18,30,.55);z-index:155;display:none;}
+/* main */
+#main{margin-left:296px;}
+.content{max-width:860px;margin:0 auto;padding:0 36px 80px;}
+/* cover */
+.cover{background:linear-gradient(160deg,#16263b 0%,#1b3050 55%,#22405f 100%);color:#fff;padding:96px 48px 72px;position:relative;overflow:hidden;}
+.cover::after{content:"";position:absolute;right:-80px;top:-80px;width:340px;height:340px;border:1px solid rgba(199,154,63,.25);border-radius:50%;}
+.cover::before{content:"";position:absolute;right:40px;bottom:-140px;width:260px;height:260px;border:1px solid rgba(255,255,255,.08);border-radius:50%;}
+.cover .kicker{font-size:12px;letter-spacing:.28em;color:var(--accent);text-transform:uppercase;margin-bottom:22px;}
+.cover h1{font-family:"Noto Serif SC",serif;font-size:44px;line-height:1.28;margin:0 0 18px;font-weight:900;max-width:720px;}
+.cover .sub{font-size:17px;line-height:1.9;color:#c8d3e2;max-width:680px;margin:0 0 30px;font-weight:300;}
+.cover .metarow{display:flex;flex-wrap:wrap;gap:10px 26px;font-size:13px;color:#a9b7cb;border-top:1px solid rgba(255,255,255,.16);padding-top:20px;max-width:720px;}
+.cover .ver{display:inline-block;border:1px solid rgba(199,154,63,.6);color:var(--accent);padding:4px 14px;border-radius:20px;font-size:12.5px;letter-spacing:.08em;margin-bottom:22px;}
+.statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:46px 0 8px;max-width:780px;}
+.statcard{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:18px 16px;}
+.statcard .v{font-family:"Noto Serif SC",serif;font-size:23px;font-weight:700;color:#fff;line-height:1.2;font-variant-numeric:tabular-nums;}
+.statcard .l{font-size:12px;color:#b8c4d6;margin-top:8px;line-height:1.5;}
+.statcard .s{font-size:11px;color:#8494ac;margin-top:6px;}
+/* chapter head */
+section{padding:8px 0 10px;border:none;background:transparent;}
+.chap-head{display:flex;align-items:flex-start;gap:18px;margin:46px 0 6px;padding-top:26px;border-top:1px solid var(--line-strong);}
+.chap-head .cnum{font-family:"Noto Serif SC",serif;font-size:46px;font-weight:900;color:var(--accent);line-height:1.1;font-variant-numeric:tabular-nums;}
+.chap-text{flex:1;min-width:0;}
+.chap-head .ckick{font-size:11px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;display:block;margin:4px 0 8px;}
+section:first-of-type .chap-head{border-top:none;}
+h2{font-family:"Noto Serif SC",serif;color:var(--ink);font-size:29px;line-height:1.4;margin:0;font-weight:700;}
+h3{font-size:20px;color:var(--navy-2);margin:38px 0 12px;font-weight:700;padding-bottom:8px;border-bottom:1px solid var(--line);}
+[data-theme="dark"] h3{color:var(--navy-2);}
+h4{font-size:16.5px;color:var(--ink-2);margin:26px 0 10px;font-weight:700;}
+p{margin:14px 0;}
+ul,ol{padding-left:24px;}li{margin:6px 0;}
+/* 本章小节 */
+.chap-toc{background:var(--surface-2);border-radius:10px;padding:12px 18px;margin:16px 0 6px;font-size:13.5px;}
+.chap-toc .tt{font-size:11px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;margin-bottom:6px;}
+.chap-toc a{color:var(--ink-2);text-decoration:none;margin-right:16px;line-height:2;}
+.chap-toc a:hover{color:var(--accent-ink);}
+/* tables */
+.tbl-wrap{overflow-x:auto;margin:22px 0;border:1px solid var(--line);border-radius:12px;background:var(--surface);box-shadow:var(--shadow);-webkit-overflow-scrolling:touch;}
+table{border-collapse:collapse;width:100%;font-size:13.5px;background:var(--surface);}
+th{background:var(--navy);color:#fff;text-align:left;padding:11px 12px;font-weight:600;vertical-align:top;font-size:13px;position:sticky;top:0;z-index:2;}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;word-break:break-word;line-height:1.7;}
+tr:nth-child(even) td{background:rgba(127,145,168,.05);}
+tr:hover td{background:var(--accent-soft);}
+table.compact{font-size:13px;}
+table.compact td,table.compact th{padding:8px 10px;}
+/* callouts */
+.callout,.risk,.recommend{position:relative;padding:16px 18px 16px 54px;border-radius:12px;margin:20px 0;font-size:14.5px;border:1px solid;line-height:1.8;}
+.callout{background:var(--note-bg);border-color:var(--note-line);}
+.recommend{background:var(--tip-bg);border-color:var(--tip-line);}
+.risk{background:var(--warn-bg);border-color:var(--warn-line);}
+.callout.danger,.risk.danger{background:var(--danger-bg);border-color:var(--danger-line);}
+.callout>b:first-child,.recommend>b:first-child,.risk>b:first-child{display:block;margin-bottom:6px;font-weight:700;}
+.callout>b:first-child{color:var(--note);}.recommend>b:first-child{color:var(--tip);}
+.risk>b:first-child{color:var(--warn);}.risk.danger>b:first-child,.callout.danger>b:first-child{color:var(--danger);}
+[data-theme="dark"] .callout>b:first-child{color:var(--note);}
+.cio{position:absolute;left:16px;top:18px;width:22px;height:22px;}
+.callout .cio{color:var(--note);}.recommend .cio{color:var(--tip);}
+.risk .cio{color:var(--warn);}.risk.danger .cio,.callout.danger .cio{color:var(--danger);}
+/* mermaid figures */
+.diagram{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px 18px;margin:24px 0;text-align:center;box-shadow:var(--shadow);}
+.diagram figcaption{font-size:12.5px;color:var(--muted);margin-top:12px;padding-top:10px;border-top:1px solid var(--line);}
+.diagram figcaption b{color:var(--accent-ink);margin-right:8px;}
+.mermaid{font-size:14px;}
+.mermaid svg{max-width:100%;height:auto;}
+.mermaid-fallback{font-size:12.5px;color:var(--muted);background:var(--surface-2);border-radius:8px;padding:14px;text-align:left;white-space:pre-wrap;}
+/* bar rows */
+.bar-row{display:flex;align-items:center;margin:8px 0;font-size:13.5px;gap:10px;}
+.bar-row .lab{width:170px;flex:none;color:var(--muted);text-align:right;}
+.bar-row .track{flex:1;background:var(--surface-2);border-radius:6px;overflow:hidden;height:26px;}
+.bar-row .fill{background:var(--navy-3);color:#fff;padding:3px 10px;font-size:12px;white-space:nowrap;height:100%;display:flex;align-items:center;border-radius:6px;}
+.bar-row .fill.orange{background:var(--accent-ink);}
+/* timeline */
+.tl{margin:26px 0;position:relative;}
+.tl-item{display:grid;grid-template-columns:120px 30px 1fr;align-items:stretch;}
+.tl-time{font-size:12.5px;color:var(--muted);text-align:right;padding:6px 12px 20px 0;font-variant-numeric:tabular-nums;line-height:1.5;}
+.tl-axis{position:relative;justify-self:center;width:100%;}
+.tl-dot{width:13px;height:13px;border-radius:50%;background:var(--accent);border:3px solid var(--bg);box-shadow:0 0 0 1px var(--accent);position:absolute;top:9px;left:50%;transform:translateX(-50%);z-index:2;}
+.tl-axis::before{content:"";position:absolute;top:20px;bottom:-4px;left:50%;width:2px;transform:translateX(-50%);background:var(--line-strong);}
+.tl-item:last-child .tl-axis::before{display:none;}
+.tl-body{padding:0 0 24px 14px;}
+.tl-body h5{margin:2px 0 6px;font-size:15.5px;color:var(--ink);font-weight:700;}
+.tl-body p{margin:0;font-size:13.5px;color:var(--ink-2);line-height:1.75;}
+.tl-body .tagline{display:inline-block;font-size:11px;color:var(--accent-ink);background:var(--accent-soft);border-radius:4px;padding:1px 8px;margin-bottom:6px;}
+/* pager & backtotop */
+.pager{display:flex;justify-content:space-between;gap:14px;margin:50px 0 10px;padding:20px 0;border-top:1px solid var(--line);}
+.pager a{flex:1;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 18px;color:var(--ink);box-shadow:var(--shadow);}
+.pager a:hover{border-color:var(--accent);}
+.pager .pl{font-size:11px;color:var(--muted);display:block;margin-bottom:4px;}
+.pager .pt{font-size:14.5px;font-weight:600;}
+.pager a.next{text-align:right;}
+#toTop{position:fixed;right:22px;bottom:24px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);
+  background:var(--surface);color:var(--ink);cursor:pointer;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;
+  display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);z-index:140;}
+#toTop.show{opacity:1;pointer-events:auto;}
+#toTop:hover{transform:translateY(-2px);}
+/* footer */
+footer{background:var(--sidebar-bg);color:#9aa8bd;padding:44px 40px;margin-top:60px;font-size:13px;line-height:1.9;}
+footer .fin{max-width:860px;margin:0 auto;}
+footer b{color:#e6ecf5;}
+footer .disc{border-top:1px solid rgba(255,255,255,.1);margin-top:16px;padding-top:16px;font-size:12.5px;color:#7e8da3;}
+/* sources list */
+#sources ol{font-size:13px;color:var(--ink-2);padding-left:22px;}
+#sources li{margin:7px 0;line-height:1.6;word-break:break-word;}
+#sources a{color:var(--note);word-break:break-all;}
+@media(max-width:960px){
+  #sidebar{transform:translateX(-100%);box-shadow:0 0 40px rgba(0,0,0,.4);}
+  body.drawer-open #sidebar{transform:translateX(0);}
+  body.drawer-open #scrim{display:block;}
+  #main{margin-left:0;}
+  #mobilebar{display:flex;}
+  .content{padding:0 18px 60px;}
+  .cover{padding:80px 22px 48px;}
+  .cover h1{font-size:30px;}
+  .statgrid{grid-template-columns:repeat(2,1fr);gap:12px;}
+  .chap-head .cnum{font-size:34px;}
+  h2{font-size:23px;}
+  .tl-time{width:80px;font-size:11.5px;}
+  .tl-item{grid-template-columns:84px 26px 1fr;}
+  #progressPct{top:60px;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="progressPct">0%</div>
+<div id="mobilebar">
+  <button id="hamburger" aria-label="目录"><span></span><span></span><span></span></button>
+  <span class="mtitle">法律AI智能体 · 学生团队落地决策报告 V3</span>
+  <button id="themeBtn2" style="background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:16px;padding:4px 10px;font-size:11px;cursor:pointer;">深色</button>
+</div>
+<div id="scrim"></div>
+
+<aside id="sidebar">
+  <div class="side-brand">
+    <div class="k">LegalTech Decision Report</div>
+    <h1>法律AI智能体<br>学生团队落地决策报告</h1>
+    <p>V3 · 学生团队版<br>2026年9月 · 河南郑州 · 内部讨论稿</p>
+  </div>
+  <div class="side-search"><input id="tocFilter" type="search" placeholder="过滤章节关键词…"></div>
+  <nav id="tocnav" aria-label="章节目录"></nav>
+  <div class="side-foot"><span>学生创业调研团队</span><button id="themeBtn">深色模式</button></div>
+</aside>
+
+<main id="main">
+  <header class="cover">
+    <div class="kicker">Student Startup · Near-Zero-Cost Validation · Internal Decision Memo</div>
+    <span class="ver">V3 · 学生团队版</span>
+    <h1>法律AI智能体<br>学生团队落地决策报告</h1>
+    <p class="sub">在校近零成本验证 → 以赛养创 → 毕业节点公司化：面向学生创业团队的市场、技术、合规、资金与未来规划一体化方案。</p>
+    <div class="statgrid">
+      <div class="statcard"><div class="v num">4601.8万件</div><div class="l">2024年全国法院受理各类案件</div><div class="s">最高法2025年工作报告</div></div>
+      <div class="statcard"><div class="v num">48.6亿元</div><div class="l">2024年中国AI法律工具融资（23起）</div><div class="s">行业投融资报告</div></div>
+      <div class="statcard"><div class="v num">45.9亿美元</div><div class="l">2025全球法律AI市场规模</div><div class="s">年复合增速约21.8%</div></div>
+      <div class="statcard"><div class="v num">≈450–1600元</div><div class="l">首年真实现金支出（近零成本）</div><div class="s">最低可压至约450元</div></div>
+    </div>
+    <div class="metarow">
+      <span>报告日期：2026年9月</span><span>地点：河南 · 郑州</span>
+      <span>阶段：在校期（距毕业约1年）</span><span>密级：内部讨论稿</span>
+    </div>
+  </header>
+
+  <div class="content" id="content">
+<section id="s1">
+<h2>一、执行摘要（学生团队版总判断）</h2>
+<p>本报告在 V1《8人团队、首年200万预算》调研稿基础上，按<b>"在校大学生兼职团队、资金极有限、近零成本启动"</b>这一新约束重写。市场、竞品、技术、数据、合规中仍成立的判断予以保留（见第二至八章），但所有"推荐结论、投入、团队、第一步"全部按学生处境推倒重来：<b>不找天使融300万、不租办公室、不养全职团队、不现在就注册公司、不自建大模型备案</b>，先用一学期把东西做出来、把真实用户跑出来，再决定要不要All in。</p>
+
+<div class="recommend">
+<b>一句话总判断</b>
+法律科技正从"信息检索/法律电商"切换到"大模型+法律Agent"阶段：2024年中国AI法律工具融资23起、合计48.6亿元<sup><a href="#src22">[22]</a></sup>，全球法律AI市场2025年约45.9亿美元、年增约21.8%<sup><a href="#src14">[14]</a></sup>。但C端已被百度法行宝以"完全免费"横扫（服务用户超7000万）<sup><a href="#src-cn4">[CN-4]</a></sup>，合同审查B端已成红海。<b>对一个没钱、没时间（还要上课）的学生团队，正确姿势不是正面拼流量、拼融资，而是"近零成本验证 + 以赛养创 + 先做深一个校园/民生细分场景"</b>：用已备案大模型的免费额度、免费云资源、Dify社区版/Coze免费版把MVP跑起来，用大创项目、互联网+大赛、挑战杯拿奖金和背书，用法学院实践基地/法律援助社团解决"法律质量谁来兜底"，<b>毕业节点再注册公司、再谈融资</b>。
+</div>
+
+<div class="callout">
+<b>推荐技术路线（学生起步版，工程化但不烧钱）</b>
+<b>不自研基座、不自部署大模型、不现在做自有大模型备案</b>。起步直接调用<b>已备案商用API的免费额度</b>（硅基流动免费模型 / DeepSeek / 通义千问·百炼 / 智谱GLM的学生或新用户免费额度），用<b>免费云服务器/Serverless + 免费对象存储</b>，编排层用 <b>Dify 社区版（可自托管、数据自有）或 Coze 免费版（出活快）</b>先搭出可用产品。法律RAG的工程规范（双路检索、引用回链、废止法条校验）从第一天就按第四章标准做，但实现上先用开源embedding+免费向量库。<b>LangGraph 这类可迁移的代码化编排框架作为进阶方向</b>，不把核心流程锁死在某个可视化拖拽平台里——这样毕业过渡到公司时不用推倒重来。
+</div>
+
+<div class="callout">
+<b>推荐MVP范围（先打校园身边人）</b>
+第一个学期<b>不要上来就做"万能法律AI"</b>，先打透学生和普通人最痛、又最容易在身边找到真实用户的场景：<b>兼职/实习劳动纠纷（欠薪、N+1、工伤）、租房押金纠纷、校园贷/培训贷、消费维权（网购、美团外卖、预付卡跑路）、简单借条/劳动仲裁文书</b>。交付"智能多轮咨询 + 法条大白话解读 + 赔偿/费用估算器 + 法律文书按次生成"四个P0功能，先跑在微信小程序/公众号或H5上。这些场景需求刚性、用户就在身边（同学、学长学姐、校园周边商户），<b>不用花钱投流就能拿到第一批真实反馈</b>。
+</div>
+
+<div class="recommend">
+<b>推荐合规架构（学生最轻路径）</b>
+在学生期、未注册公司阶段，<b>不碰需要重资质的业务</b>：只做"法律知识科普 + 通用文书模板 + AI辅助分析（仅供参考）"，刑事辩护、会见、取保、出庭100%不碰，一律引导到学校法律援助中心、12348公共法律服务热线、合作律所。技术上<b>只调用已备案模型API、并在产品页公示所用模型名称与备案号</b>，由此免去"自部署大模型需亲自做国家生成式AI备案"的重负担；面向公众提供前按地方网信办要求做应用登记。法律内容的准确性把关，由<b>团队内部法律专业成员 + 其法学院导师与实践基地网络</b>完成抽检（导师通常不付顾问费），不需要现在外聘付费律师。
+</div>
+
+<div class="risk">
+<b>学生期合规红线（生死线，缺一不可）</b>
+①产品始终自称"法律AI工具/普法助手"，禁用"律师/法律顾问/包赢/100%胜诉/不赢不收费"话术；②每次AI输出持续标注"AI工具、不构成法律意见、不替代律师"；③刑事、未成年、群体事件、国家秘密、帮人毁灭/伪造证据等场景100%熔断、转人工或引导12348；④只用境内已备案模型API、用户咨询数据默认不用于训练、不出境；⑤学生期<b>不代收律师费、不与律所做案源分成</b>（传统"挂靠/联营"已被郑州等地穿透认定封堵<sup><a href="#src-c18">[C-18]</a></sup>）；⑥注意知识产权归属——避免因使用学校实验室资源、导师课题经费导致成果被学校主张（详见第九章学生特殊合规）。DoNotPay因宣称"机器人律师可替代真人"被美国FTC罚款19.3万美元<sup><a href="#src-f13">[F-13]</a></sup>，是必须研究的反面教材。
+</div>
+
+<p><b>第一年现金支出：目标压到 0–10 万元，其中大部分可以是 0 元。</b>学生期最大的"成本"不是钱，是<b>时间和学业</b>。现金主要花在：服务器/API超出免费额度后的小额账单（每月几十到几百元）、小程序认证（300元/年）、比赛报名费与差旅、必要的软件/域名。<b>钱从哪来</b>：先用比赛奖金（互联网+、挑战杯、大创、各行业赛，校级→省级→国家级单个数百到数万元）→ 大学生创新创业训练计划经费（国家级/省级立项数千到数万元）→ 郑州市/高新区大学生创业补贴与孵化器免费工位 → 毕业前后再谈种子/天使。<b>在没拿到第一笔比赛奖金和真实付费数据之前，不要融资、不要注册公司、不要签任何长期租约。</b></p>
+
+<div class="recommend">
+<b>第一步行动（本周即启动）</b>
+拉上法学院实践基地/法律援助社团，列一张"同学身边真实法律问题清单"（先访谈20个同学/学长）；注册公众号和抖音/小红书号开始"普法内容先行"；镜像国家法律法规数据库与人民法院案例库搭最小知识库；用DeepSeek/通义免费API跑通第一个"兼职欠薪→能赔多少→仲裁申请书生成"闭环。详见第十一章"未来一学期90天按周清单"。
+</div>
+</section>
+
+<section id="s2">
+<h2>二、市场与需求分析</h2>
+
+<h3>2.1 纠纷盘子：千万级案件只是冰山一角</h3>
+<p>2024年全国各级法院受理各类案件<b>4601.8万件</b>、审结4541.9万件，其中民商事一审约1823.7万件<sup><a href="#src-m1">[M-1]</a></sup><sup><a href="#src-m2">[M-2]</a></sup>；同期全国消协组织受理消费者投诉176.2万件（同比+32.6%），市场监管部门受理消费投诉举报高达1862.5万件<sup><a href="#src-m10">[M-10]</a></sup><sup><a href="#src-m11">[M-11]</a></sup>。需要清醒认识：进入司法程序的案件只是全部法律需求的一小部分，大量纠纷通过消协、市监、调解解决，还有海量"未被提出"的需求——这正是普惠型法律AI的潜在入口。</p>
+
+<div class="tbl-wrap"><table>
+<tr><th>指标（2024年）</th><th>数值</th><th>同比</th><th>来源</th></tr>
+<tr><td>全国法院受理各类案件</td><td>4601.8万件</td><td>+1.0%</td><td>最高法2025年工作报告<sup><a href="#src-m1">[M-1]</a></sup></td></tr>
+<tr><td>全国法院审结各类案件</td><td>4541.9万件</td><td>+0.3%</td><td>同上</td></tr>
+<tr><td>民商事一审受理</td><td>约1823.7万件</td><td>小幅增长</td><td>最高法/中经数据<sup><a href="#src-m3">[M-3]</a></sup></td></tr>
+<tr><td>民生案件（教育/养老/医疗等）审结</td><td>548.3万件</td><td>+1.7%</td><td>最高法工作报告<sup><a href="#src-m1">[M-1]</a></sup></td></tr>
+<tr><td>消协组织受理消费者投诉</td><td>176.2万件</td><td>+32.6%</td><td>中消协<sup><a href="#src-m10">[M-10]</a></sup></td></tr>
+<tr><td>市监部门受理投诉举报</td><td>1862.5万件</td><td>+7.0%</td><td>市场监管总局<sup><a href="#src-m11">[M-11]</a></sup></td></tr>
+<tr><td>公共法律服务平台五年累计咨询</td><td>1.7亿余次</td><td>—</td><td>国新办发布会<sup><a href="#src-m5">[M-5]</a></sup></td></tr>
+<tr><td>司法所年均解答咨询</td><td>2950万人次</td><td>—</td><td>司法部"十四五"<sup><a href="#src-m5">[M-5]</a></sup></td></tr>
+</table></div>
+
+<h3>2.2 高频法律场景与案件量</h3>
+<p>2024年一审民商事结案高度集中于民生与交易场景。借款合同、买卖、离婚、交通事故、物业、劳动六类合计占民商事案件的大头，是C端MVP必须优先覆盖的案由。</p>
+
+<div class="tbl-wrap"><table class="compact">
+<tr><th>排名</th><th>纠纷类型</th><th>2024年量（万件）</th><th>同比</th><th>典型场景</th></tr>
+<tr><td>1</td><td>借款合同纠纷（含民间借贷）</td><td>419.2</td><td>+5.5%</td><td>亲友借贷、网贷、信用卡、金融借款</td></tr>
+<tr><td>2</td><td>买卖合同纠纷</td><td>198.8</td><td>+17.4%</td><td>货款拖欠、商品质量、电商交易</td></tr>
+<tr><td>3</td><td>婚姻家庭/离婚纠纷</td><td>152.0（离婚）</td><td>-11.3%</td><td>离婚、财产分割、抚养、彩礼、继承</td></tr>
+<tr><td>4</td><td>机动车交通事故责任纠纷</td><td>82.1</td><td>+2.6%</td><td>车险理赔、人身损害、非机动车事故</td></tr>
+<tr><td>5</td><td>物业服务合同纠纷</td><td>78.7</td><td>-10.7%</td><td>物业费、小区管理</td></tr>
+<tr><td>6</td><td>劳务合同纠纷</td><td>68.8</td><td>—</td><td>劳务报酬、灵活用工</td></tr>
+<tr><td>7</td><td>劳动争议</td><td>61.4</td><td>+5.5%</td><td>辞退赔偿、加班费、工伤、社保</td></tr>
+<tr><td>8</td><td>追索劳动报酬（欠薪）</td><td>8.8</td><td>—</td><td>农民工讨薪（年帮追回285.4亿元）</td></tr>
+<tr><td>—</td><td>涉教育/养老/医疗民生案件</td><td>548.3（合计）</td><td>+1.7%</td><td>医疗纠纷、校园伤害、养老服务</td></tr>
+</table></div>
+
+<div class="callout">
+<b>核心痛点："用不起法"</b>
+律师咨询费普遍200–800元/小时起，民事案件代理费动辄数千元至上万元；一个标的额1万元出头的纠纷，维权成本（咨询+代理+诉讼+时间）常接近甚至超过标的本身，导致大量普通人在咨询阶段即放弃维权<sup><a href="#src-m12">[M-12]</a></sup>。与此同时全国法律援助工作人员仅1.2万人，人工供给远不能匹配1.7亿次/年的咨询需求——AI替代/辅助空间巨大。
+</div>
+
+<h3>2.3 LegalTech市场规模与增长（多口径并列）</h3>
+<p>不同机构对"LegalTech"边界定义不同，导致数据口径差异大，但<b>高增长趋势一致：法律科技增速（20%+）显著高于法律服务整体增速（约14%），AI是核心增长引擎</b>。</p>
+
+<div class="tbl-wrap"><table class="compact">
+<tr><th>口径</th><th>2024年</th><th>2025年</th><th>2026年（预测）</th></tr>
+<tr><td>法律服务行业整体市场</td><td>约3000亿元</td><td>约3200亿元</td><td>—</td></tr>
+<tr><td>法律科技软件市场（窄口径）</td><td>104–108亿元</td><td>128.6亿元（+23.7%）</td><td>—</td></tr>
+<tr><td>法律科技整体市场（含服务）</td><td>—</td><td>突破500亿元</td><td>约600亿元</td></tr>
+<tr><td>全球法律AI市场</td><td>—</td><td>45.9亿美元</td><td>55.9亿美元（CAGR 21.8%）</td></tr>
+<tr><td>中国法律AI软件（最窄口径）</td><td>—</td><td>约5312万美元（占全球12.4%）</td><td>CAGR 30.25%</td></tr>
+</table></div>
+
+<p>市场结构可视化（中国法律科技软件 vs 整体法律服务，2025年，亿元）：</p>
+<div class="bar-row"><span class="lab">法律服务整体</span><div class="track"><div class="fill" style="width:96%">3200亿元</div></div></div>
+<div class="bar-row"><span class="lab">法律科技(含服务)</span><div class="track"><div class="fill" style="width:24%">约500亿元</div></div></div>
+<div class="bar-row"><span class="lab">法律科技软件</span><div class="track"><div class="fill orange" style="width:8%">128.6亿元</div></div></div>
+
+<h3>2.4 资本动向：从工具到Agent</h3>
+<p>2024年中国AI法律工具行业发生投融资23起、总金额48.6亿元（同比+21.5%）<sup><a href="#src22">[22]</a></sup>。2025–2026年智合AI（数千万元A轮，达泰资本领投）<sup><a href="#src-m15">[M-15]</a></sup>、艾语智能（天使+Pre-A）<sup><a href="#src-m16">[M-16]</a></sup>、幂律智能（Pre-B近8000万元）<sup><a href="#src-cn21">[CN-21]</a></sup>持续获投。资本已从"法律信息检索/匹配"转向"大模型+法律Agent"，G端、B端、C端三线并行，但<b>不再为"套壳DeepSeek"买单，青睐有数据、有客户、有工作流的团队</b>。</p>
+
+<h3>2.5 政策驱动：G端背书 + B端合规刚需 + C端普惠</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>时间</th><th>主体</th><th>政策/文件</th><th>要点</th></tr>
+<tr><td>2024.12</td><td>最高法</td><td>《人民法院第六个五年改革纲要(2024–2028)》</td><td>强化大语言模型辅助办案<sup><a href="#src-m17">[M-17]</a></sup></td></tr>
+<tr><td>2025.06</td><td>国务院</td><td>《保障中小企业款项支付条例》施行</td><td>治理回款难，催生合同/账款法律需求<sup><a href="#src-m21">[M-21]</a></sup></td></tr>
+<tr><td>2026.09</td><td>司法部</td><td>"法仪大模型"发布</td><td>全国首个数字法治AI整体方案，覆盖12场景<sup><a href="#src-m19">[M-19]</a></sup></td></tr>
+<tr><td>2026.09</td><td>最高法</td><td>《关于依法审理涉人工智能纠纷案件的意见》</td><td>规范AI证据效力、惩治AI虚假诉讼<sup><a href="#src-m18">[M-18]</a></sup></td></tr>
+</table></div>
+<p>司法部正推进公共法律服务实体平台、12348热线、网络平台"三平台融合"，要求24小时"不打烊"服务；全国已有440万名"法律明白人"<sup><a href="#src-m20">[M-20]</a></sup>。这是C端普惠与G端采购的双重顺风。</p>
+
+<h3>2.6 用户分层画像</h3>
+<p>全国执业律师83万人（2026年底预计破90万）、律所4.5万家<sup><a href="#src-m6">[M-6]</a></sup>；登记在册经营主体1.89亿户，其中企业6020万户、个体工商户1.25亿户<sup><a href="#src-m7">[M-7]</a></sup><sup><a href="#src-m8">[M-8]</a></sup>。双侧市场（14亿C端人口 + 1.89亿经营主体）分层特征显著：</p>
+
+<div class="tbl-wrap"><table class="compact">
+<tr><th>维度</th><th>C端普通民众</th><th>小微企业/个体户</th><th>律师/从业者</th><th>企业法务</th></tr>
+<tr><td>人群规模</td><td>14亿</td><td>6020万企业+1.25亿个体户</td><td>83万律师+4.5万律所</td><td>大型企业为主</td></tr>
+<tr><td>核心需求</td><td>婚姻、劳动讨薪、借贷、消费维权、交通事故</td><td>合同审查、账款催收、用工合规</td><td>类案检索、文书起草、案件管理</td><td>合同全生命周期、合规体系</td></tr>
+<tr><td>付费意愿</td><td>极低—低</td><td>低—中（愿为可量化ROI付费）</td><td>中—高（人均年付数千—数万）</td><td>高（SaaS年费数万—数十万）</td></tr>
+<tr><td>付费模式</td><td>免费增值、单次9.9–99元</td><td>月订阅数百元</td><td>SaaS订阅、按席位</td><td>企业SaaS、私有化</td></tr>
+<tr><td>AI价值点</td><td>7×24咨询、文书生成、流程指引</td><td>合同模板+审查、催收指引、用工自查</td><td>文书初稿、类案检索、案卷摘要</td><td>合同审查、合规监控、知识库</td></tr>
+</table></div>
+
+<div class="callout">
+<b>分层结论</b>
+C端是"流量与普惠"层（变现靠增值、导流律师、B端广告）；小微企业/个体户是"付费意愿被压抑的蓝海"（需求刚性、覆盖极低）；<b>律师是"最快付费"的种子用户</b>；企业法务是"高客单价"层。创业团队应以C端微信小程序低成本获客、以律师/小微B端付费变现。
+</div>
+
+<h3>2.7 需求测算与机会判断</h3>
+<p>把上述宏观数据折算成可操作的市场假设：以最高频的劳动争议为例，全国年收案约61.4万件，但若把"被辞退想知道能赔多少""没签合同能不能要双倍工资"这类<b>有纠纷但尚未起诉</b>的潜在咨询者计入，实际有诉求的人群是已立案案件的数十倍。这与公共法律服务平台五年累计1.7亿次咨询、司法所年均2950万人次解答的数据相互印证——真正的市场是"已立案案件量"背后那个未被满足的长尾。对一个MVP产品而言，只要在抖音"离职N+1怎么算"这类精准长尾流量中拿到千分之几的转化，就能在数月内积累数万真实咨询用户。</p>
+<p>付费意愿的结构性错配是本项目最重要的商业洞察：C端对"咨询"本身极度价格敏感，但对"直接产出一份能用的文书、直接算出我能拿多少钱"这类<b>确定性结果</b>的支付意愿显著更高。这解释了为什么行业里跑通的是"文书按次付费"（19.9–49.9元，用户感知是省下了几百上千元律师费）而非"包月咨询会员"。同理，律师导流佣金之所以是第一年收入主力，是因为案件代理费（动辄5000–5万元）的客单价足够高，即使只抽成15–20%、转化率不高，绝对收入也远高于C端会员费。</p>
+<p>政策端的顺风与红线必须同时看清：一方面，"法仪大模型"发布、六五改革纲要要求强化大模型辅助办案、公共法律服务三平台融合、法律援助法取消事项限制，都在为AI+法治打开G端采购与C端普惠空间；另一方面，最高法2026年9月专门就AI纠纷审理出台意见、惩治利用AI虚假诉讼、规范AI生成内容证据效力<sup><a href="#src-m18">[M-18]</a></sup>，意味着监管已经从"鼓励发展"进入"规范发展"阶段。对创业团队而言，这恰恰是好事——它把"靠噱头、靠套壳、靠夸大宣传"的低质竞争者挡在门外，抬高了"可溯源、可解释、合规"产品的信任壁垒。</p>
+</section>
+
+<section id="s3">
+<h2>三、竞品研究</h2>
+
+<h3>3.1 国内竞争格局：三层梯队、两条主线</h3>
+<p>国内法律AI已形成稳定梯队：<b>第一梯队</b>为大厂基座派（百度法行宝、阿里通义法睿、讯飞星火法律）与专业数据派（北大法宝、威科先行）；<b>第二梯队</b>为垂直深耕派（iCourt AlphaGPT、幂律智能、法狗狗、法天使、秘塔MetaLaw）；<b>第三梯队</b>为老牌法律互联网平台（律图、找法网、无讼）的AI补课与各地公共法律服务平台对DeepSeek的批量接入<sup><a href="#src-cn1">[CN-1]</a></sup>。</p>
+
+<div class="callout">
+<b>两个关键行业共识</b>
+①"通用大模型+法律垂域精调+RAG+知识图谱"已成事实标准，几乎无玩家再从零训练法律基座；②<b>数据壁垒是最硬的护城河</b>——北大法宝坐拥596万+法规、1.88亿+案例、4750万+行政执法数据，通义法睿用1.6亿份司法文书训练<sup><a href="#src-cn12">[CN-12]</a></sup>。谁掌握结构化、可溯源、时效新的法条与案例库，谁就能压制通用大模型的幻觉。
+</div>
+
+<h4>国内重点竞品功能矩阵</h4>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>产品</th><th>定位</th><th>核心功能</th><th>数据/技术</th><th>商业模式</th><th>优势/短板</th></tr>
+<tr><td><b>百度法行宝</b></td><td>C端免费咨询</td><td>52类问答、文书模板、计算器、类案检索</td><td>文心+法律图谱+iRAG；数亿文书、300万法规</td><td>C端免费+会员/电量+G端项目+案源</td><td>流量7000万、免费横扫；专业深度弱<sup><a href="#src-cn4">[CN-4]</a></sup></td></tr>
+<tr><td><b>阿里通义法睿</b></td><td>C/B/G三端</td><td>咨询、文书、合同审查、智能阅卷、证据链、法律关系图谱</td><td>Qwen基座+精调+RL+RAG+Agent+司法小模型；1.6亿文书</td><td>C端免费+百炼API按量+G/B项目</td><td>技术栈全、3500+法院；C端品牌弱<sup><a href="#src-cn3">[CN-3]</a></sup></td></tr>
+<tr><td><b>讯飞星火法律</b></td><td>G端为主</td><td>AI法官助理、卷宗多模态编目(95%)、证据目录</td><td>星火专项训练+多模态；司法卷宗数据</td><td>G端项目制+私有化</td><td>政法渠道深；C/中小律所弱<sup><a href="#src-cn8">[CN-8]</a></sup></td></tr>
+<tr><td><b>北大法宝</b></td><td>B/G专业数据</td><td>智能立法/司法/法务、法宝来合同、法宝灵境、MCP开放</td><td>596万法规、1.88亿案例；多模型适配+专项小模型</td><td>机构订阅+项目+MCP调用</td><td>数据最全最权威、可溯源；体验偏传统<sup><a href="#src-cn13">[CN-13]</a></sup></td></tr>
+<tr><td><b>威科先行</b></td><td>高端B端</td><td>AI检索、AI阅读、合同审核(2026 WAIC一等奖)、诉讼全流程</td><td>威科全球库+专家校验，MCP开放</td><td>高端机构订阅</td><td>专业权威、幻觉控制好；贵、C端缺位<sup><a href="#src-cn15">[CN-15]</a></sup></td></tr>
+<tr><td><b>iCourt AlphaGPT</b></td><td>B端律师</td><td>咨询、合同审查、文书、阅卷、类案同判、时间轴</td><td>自研垂类模型+DeepSeek，已备案；6亿数据</td><td>律所SaaS订阅</td><td>律师工作流最深；价格偏高<sup><a href="#src-cn25">[CN-25]</a></sup></td></tr>
+<tr><td><b>幂律智能</b></td><td>B端合同</td><td>MeCheck合同审查、MeBox协作平台</td><td>清华NLP+法律垂类大模型+图谱</td><td>B端SaaS+私有化</td><td>合同垂直深、股东强；扩展慢<sup><a href="#src-cn21">[CN-21]</a></sup></td></tr>
+<tr><td><b>法狗狗</b></td><td>G+B</td><td>火眼审阅(300万用户)、智审通合同SaaS</td><td>NLP+OCR+图谱；21省高院要素数据</td><td>G项目+B订阅</td><td>政务渠道广；专业口碑两极</td></tr>
+<tr><td><b>秘塔MetaLaw</b></td><td>律师/个人</td><td>口语化检索、类案报告、合同审查(200+类型)</td><td>秘塔搜索+大模型</td><td>基础免费+个人499元/年</td><td>体验好性价比高；数据厚度不足<sup><a href="#src-cn29">[CN-29]</a></sup></td></tr>
+<tr><td><b>法天使</b></td><td>企业法务</td><td>中国合同库(1000+类1万+模板)、合同助手12功能</td><td>合同标准方法+大模型</td><td>SaaS订阅+培训</td><td>合同标准壁垒；检索诉讼弱<sup><a href="#src-cn28">[CN-28]</a></sup></td></tr>
+<tr><td><b>无讼/华宇</b></td><td>律师/G端</td><td>天工诉讼管理、开务法务部；万象大模型、元典问达</td><td>大数据+图谱；政法行业沉淀</td><td>SaaS+案源撮合+G项目</td><td>社区/渠道深；大模型声量减弱</td></tr>
+<tr><td><b>腾讯ADP/华为盘古</b></td><td>B/G</td><td>知识问答、合同审查、Playbooks；CNKI法律Agent</td><td>腾讯云知识引擎/全栈信创</td><td>云服务+企业定制+政务</td><td>生态强；法律深度待验证<sup><a href="#src-cn30">[CN-30]</a></sup></td></tr>
+</table></div>
+
+<div class="callout">
+<b>DeepSeek是2025年最大变量</b>
+2025年起湖北鄂州、吉林大安、辽宁本溪等公共法律服务平台纷纷接入DeepSeek-R1推出"AI律师"，贵州律皓"法管家"基于DeepSeek-R1蒸馏对外提供API<sup><a href="#src-cn32">[CN-32]</a></sup><sup><a href="#src-cn33">[CN-33]</a></sup>。这意味着"法律大模型"本身不再稀缺，竞争焦点迅速转向<b>垂直工作流、数据合规、行业know-how与Agent编排</b>。字节豆包/扣子不做独立法律产品、腾讯走企业级workspace、华为无消费品级法律产品——给创业公司留下了"做深工作流"的窗口。
+</div>
+
+<h3>3.2 国外标杆与启示</h3>
+<p>海外已分化为三阵营：老牌数据巨头（Thomson Reuters Westlaw、RELX LexisNexis）靠自有判例库做AI增强检索；原生垂直AI公司（Harvey、Legora、Spellbook、EvenUp）靠大模型+工作流切入，2025年估值集体暴涨；通用大厂（Microsoft/Google/OpenAI）只做底座不做专用法律产品<sup><a href="#src-f1">[F-1]</a></sup>。</p>
+
+<h4>国外重点竞品矩阵</h4>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>产品</th><th>定位</th><th>技术路线</th><th>定价/融资</th><th>启示</th></tr>
+<tr><td><b>Harvey</b></td><td>顶级律所/500强法务</td><td>GPT级法律微调+RAG，接Lexis数据，后转Kimi K3底座后训练</td><td>F轮估值80亿美元；ARR约1.9亿(2025底)<sup><a href="#src-f4">[F-4]</a></sup></td><td>B端标杆客户打法+与数据/模型方双绑</td></tr>
+<tr><td><b>CoCounsel(TR)</b></td><td>Westlaw系律所</td><td>GPT-4+Westlaw数据RAG，强制引用回链</td><td>并入Westlaw，加购225–640美元/用户/月<sup><a href="#src-f8">[F-8]</a></sup></td><td>"权威数据+强制引用"是信任核心</td></tr>
+<tr><td><b>Lexis+Protégé</b></td><td>Lexis系律所</td><td>Lexis数据RAG+Citation Agent+模型可路由</td><td>约300–500+美元/用户/月</td><td>引用核查Agent是降幻觉范式</td></tr>
+<tr><td><b>Spellbook</b></td><td>律所合同起草</td><td>Word插件，GPT/Claude任务路由，1000万+合同</td><td>108–149美元/用户/月；ARR约5000–8000万<sup><a href="#src-f16">[F-16]</a></sup></td><td>钻进律师主战场Word+PLG高增长</td></tr>
+<tr><td><b>EvenUp</b></td><td>人身伤害原告律师</td><td>极窄垂直场景AI</td><td>E轮估值20亿美元<sup><a href="#src-f21">[F-21]</a></sup></td><td>垂直深度&gt;横向广度</td></tr>
+<tr><td><b>Legora</b></td><td>律师审查/研究</td><td>法律原生模型（非套壳）</td><td>C轮1.5亿，估值18亿<sup><a href="#src-f19">[F-19]</a></sup></td><td>垂直专用模型叙事获天价融资</td></tr>
+<tr><td><b>Robin AI</b></td><td>企业合同</td><td>AI+内部持证律师+印度外包复核</td><td>B+轮累计约6100万美元</td><td>重服务可信但毛利低，需权衡</td></tr>
+<tr><td><b>SpotDraft</b></td><td>企业CLM出海</td><td>AI原生CLM、端侧审查</td><td>客单约2.5万美元/年<sup><a href="#src-f25">[F-25]</a></sup></td><td>印度团队低成本出海欧美范本</td></tr>
+<tr><td><b>DoNotPay</b></td><td>C端消费者</td><td>通用大模型套壳，无测试无律师</td><td>被FTC罚19.3万美元(2025)<sup><a href="#src-f13">[F-13]</a></sup></td><td><b>反面教材：虚假宣传"替代律师"</b></td></tr>
+<tr><td><b>MS Copilot Legal</b></td><td>M365生态</td><td>GPT+Claude嵌入Word/Outlook</td><td>约30美元/用户/月(加购)<sup><a href="#src-f30">[F-30]</a></sup></td><td>办公套件入口，但无法律数据</td></tr>
+</table></div>
+
+<div class="risk">
+<b>DoNotPay案：C端"机器人律师"路线已被监管证伪</b>
+美国FTC 2025年2月裁定DoNotPay罚款19.3万美元，禁止其在无证据情况下宣称"AI律师可替代真人律师"，核心指控是其<b>从未聘请律师测试AI输出质量</b><sup><a href="#src-f13">[F-13]</a></sup>。所有跑出来的公司（Harvey、Spellbook、EvenUp）全部服务律所/法务，话术统一为"AI辅助律师、不替代律师"。中国创业者不可照搬"C端替你打官司"。
+</div>
+
+<h3>3.3 市场空白与机会点</h3>
+<ol>
+<li><b>空白一：面向中小律所/独立律师的"端到端办案Agent"仍不完美。</b>现有产品多为单点工具（检索、审合同、写文书），能真正"从接案—类案检索—证据梳理—法律关系图谱—文书生成—开庭准备"全流程自主串联的Agent极少。</li>
+<li><b>空白二：可溯源、可解释、带责任界定的"专业级Agent"。</b>面向律师/企业法务、每条结论一键溯源到法条/判例原文、并记录律师审核留痕的合规级Agent，是高价值缺口。</li>
+<li><b>空白三：企业法务"合同全生命周期+合规监控"闭环</b>仍未被打通；从起草—审查—签署—履约提醒—纠纷预警—案件管理一体化Agent稀缺。</li>
+<li><b>对中国团队的现实窗口：</b>C端被法行宝免费横扫，单独付费C端无生存空间；合同审查B端已成红海；但<b>"AI做免费流量入口 + 真人律师做合规变现出口"的普惠闭环</b>，以及嵌入微信/飞书/钉钉的中小微工作流，仍有机会。</li>
+</ol>
+
+<h3>3.4 国内外格局交叉判断</h3>
+<p>把国内与国外两张矩阵放在一起对照，能得出几个对决策至关重要的结论。第一，<b>全球技术路线已经收敛</b>：无论国内的通义法睿、iCourt，还是国外的Harvey、Spellbook、Legora，都不再从零训练基座，而是"通用/开源底座 + 法律领域后训练 + RAG引用回链 + 模型路由"。这意味着创业团队在技术选型上没有路线之争，真正的分野在数据与工作流。第二，<b>数据护城河的逻辑中外一致</b>：国外靠Westlaw、LexisNexis百年判例库，国内靠北大法宝、威科的结构化标注；没有合规、权威、可溯源的法律语料，再强的模型也会幻觉出假案例。对中国创业团队而言，问题在于裁判文书公开政策已收紧、不存在Westlaw式的可自由使用的百年库，因此必须走"官方案例库 + 商业授权 + 自建脱敏语料 + 专家标注"的组合，而非幻想爬取全量文书。</p>
+<p>第三，<b>产品形态上"嵌入既有工作流"是中外共同的胜负手</b>：Spellbook活在Word里、Luminance做Word插件、Copilot绑Office；国内则应嵌入微信（C端）、飞书/钉钉/企微（B端）、Word/WPS（律师文书）。独立大而全的网页端产品，无论中外，转化率都显著更低。第四，<b>商业化上"B端被验证、C端噱头被证伪"</b>：国外所有跑出来的公司都服务律所/法务，DoNotPay因C端"机器人律师"被FTC处罚；国内C端已被法行宝免费教育。这共同指向一个清醒定位——<b>用免费C端做流量与品牌，但把收入押在律师导流与B端工具上，绝不在C端做"替你打官司"的重承诺</b>。</p>
+<p>最后需要正视不可照搬之处：Harvey/Legora那种"套壳基础模型 + 天价估值"建立在美元风投与Am Law顶级律所付费土壤之上，中国市场缺少这种土壤；美国按席位300–600美元/月的高定价也无法直接复制。中国团队的现实路径是印度SpotDraft式的"低成本工程 + 垂直场景做深"，甚至未来用中文法律能力出海东南亚普通法/涉外合同市场——这是比死守国内高合规市场更可能跑通的补充选项。</p>
+</section>
+
+<section id="s4">
+<h2>四、技术架构方案</h2>
+<p>本章是全报告技术核心。核心立场：<b>不做自研基座大模型</b>，走"开源底座法律后训练 + 强工程化RAG + LangGraph多Agent编排"路线，通用能力优先复用已备案商用API，自建部分聚焦法律垂直数据与工具链<sup><a href="#src-t1">[T-1]</a></sup>。</p>
+
+<h3>4.1 六层总体架构</h3>
+<div class="mermaid">
+flowchart TB
+    subgraph L1["① 用户交互层"]
+        A1["微信小程序/公众号"]
+        A2["H5/Web App"]
+        A3["App iOS/Android"]
+        A4["律师工作台 Web B端"]
+        A5["语音入口 ASR/TTS"]
+    end
+    subgraph L2["② Agent编排层 LangGraph"]
+        B1["前台接待Agent"]
+        B2["案由分类路由"]
+        B3["法律分析Agent IRAC"]
+        B4["类案检索Agent"]
+        B5["文书起草Agent"]
+        B6["合同审查Agent"]
+        B7["合规审核Agent"]
+        B8["状态机/Checkpoint/HITL"]
+    end
+    subgraph L3["③ 大模型层"]
+        C1["商用已备案API 通义法睿/DeepSeek"]
+        C2["自部署快模型 Qwen3-32B"]
+        C3["自部署推理模型 DeepSeek-R1"]
+        C4["法律SFT小模型 7B/14B"]
+        C5["Embedding/Rerank BGE-M3"]
+    end
+    subgraph L4["④ 知识/数据层"]
+        D1["法律法规库 带时效版本"]
+        D2["裁判文书库 类案/量刑"]
+        D3["合同/文书模板库"]
+        D4["企业私域知识库"]
+        D5["法律知识图谱"]
+    end
+    subgraph L5["⑤ 工具/服务层 MCP"]
+        E1["法律检索工具"]
+        E2["类案检索工具"]
+        E3["计算器 诉讼费/赔偿"]
+        E4["文书导出 Word/PDF"]
+        E5["文档解析 MinerU/OCR"]
+    end
+    subgraph L6["⑥ 安全合规层"]
+        F1["内容安全审核"]
+        F2["合规备案"]
+        F3["隐私脱敏"]
+        F4["引用溯源"]
+        F5["拒答与免责"]
+    end
+    L1 --> L2
+    L2 --> L3
+    L2 --> L4
+    L2 --> L5
+    L3 --> L4
+    L6 -.-> L1
+    L6 -.-> L2
+    L6 -.-> L3
+</div>
+
+<div class="tbl-wrap"><table class="compact">
+<tr><th>层</th><th>核心组件</th><th>说明</th></tr>
+<tr><td>用户交互层</td><td>小程序/H5/App/律师工作台/语音</td><td>C端先做小程序+公众号（获客成本最低）；语音用SenseVoice+CosyVoice</td></tr>
+<tr><td>Agent编排层</td><td>LangGraph状态机、意图路由、Checkpoint、Human-in-the-loop</td><td>流程显式图化，支持断点续跑、人工介入审核文书</td></tr>
+<tr><td>大模型层</td><td>商用API+自部署模型分级路由+法律小模型+Embedding/Rerank</td><td>按任务难度/成本路由，不把所有请求打给最贵模型</td></tr>
+<tr><td>知识/数据层</td><td>法规库/案例库/模板库/私域库/图谱</td><td>法规库必须带"生效/废止/修订"时效版本</td></tr>
+<tr><td>工具/服务层</td><td>MCP标准化工具集</td><td>检索、计算、导出、解析全部MCP Server化，可复用</td></tr>
+<tr><td>安全合规层</td><td>内容审核、备案、脱敏、溯源、拒答、审计eval</td><td>贯穿全链路，独立于业务</td></tr>
+</table></div>
+
+<h3>4.2 大模型路线对比与推荐</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>维度</th><th>(a) 自研基座</th><th>(b) 开源底座后训练</th><th>(c) 通用API+RAG</th></tr>
+<tr><td>初始算力成本</td><td>极高（数亿元）</td><td>中（数十万–数百万）</td><td>极低</td></tr>
+<tr><td>数据需求</td><td>千亿–万亿token</td><td>百万–千万token高质量问答</td><td>仅需知识库文档</td></tr>
+<tr><td>知识时效性</td><td>差（重训慢）</td><td>中（靠RAG补）</td><td><b>最好（动态更新）</b></td></tr>
+<tr><td>迭代速度</td><td>月/季度级</td><td>周级（LoRA重训）</td><td><b>天级（改prompt即可）</b></td></tr>
+<tr><td>合规备案</td><td>必须亲自备案</td><td>必须亲自备案</td><td><b>调已备案API仅地方登记，最轻</b></td></tr>
+<tr><td>数据主权</td><td>完全自有</td><td>完全自有（可私有化）</td><td>数据出域给API方</td></tr>
+<tr><td>代表玩家</td><td>早期Harvey</td><td>通义法睿、Harvey Tenet(Kimi K3)<sup><a href="#src-t4">[T-4]</a></sup></td><td>大量创业公司初期</td></tr>
+</table></div>
+
+<div class="recommend">
+<b>推荐：(c)起步、(b)进阶，按学生节奏分三阶段演进</b>
+<b>阶段一·在校期（现在–毕业，0–1.5年）以路线(c)为主、且只用免费额度</b>：调用已备案商用API（硅基流动免费模型、DeepSeek、通义千问·百炼、智谱GLM的新用户/学生免费额度），用Dify社区版自托管或Coze免费版先把产品跑通；把工程规范（双路检索、引用回链、废止法条校验、引用溯源字段）按本报告标准做，但不花钱买算力、不自部署。<b>阶段二·毕业过渡期（1.5–3年）公司化后再叠加路线(b)</b>：拿到比赛奖金/大创/种子后，选DeepSeek-V3.2/Qwen3自部署底座，做法律语料继续预训练与1–5万条SFT，并自训7B/14B案由分类/要素抽取小模型。<b>阶段三·成长期（3年+）</b>做领域embedding与头部律所专属LoRA。<b>任何阶段都不推荐自研基座(a)</b>——2026年开源底座已逼近闭源旗舰，自研无代差、成本却高两个数量级，学生团队更烧不起。
+</div>
+
+<h3>4.3 法律RAG完整方案（生命线）</h3>
+<p>法律场景对"每条结论可溯源到具体法条/案号"是硬要求。必须做<b>BM25关键词 + BGE-M3向量双路检索 → RRF融合 → BGE-reranker重排 → 引用强制对齐</b>，缺任一环幻觉率都不可接受。</p>
+
+<div class="mermaid">
+flowchart LR
+    Q["用户法律问题"] --> QR["查询改写/意图路由/案由识别"]
+    QR --> BM25["BM25 关键词检索 法条号/案号"]
+    QR --> VEC["BGE-M3 语义向量检索"]
+    BM25 --> RRF["RRF 倒数排名融合"]
+    VEC --> RRF
+    RRF --> RER["BGE-reranker 交叉编码重排 top50到top10"]
+    RER --> META["元数据过滤 地域/时效/审级"]
+    META --> GRAPH["GraphRAG 多跳扩展 法条到司法解释到类案"]
+    GRAPH --> CTX["上下文组装 按效力层级排序"]
+    CTX --> LLM["LLM 生成 强制带引用编号"]
+    LLM --> VER["审核Agent 引用真实性/废止校验/拒答"]
+    VER --> ANS["答案+法条/案号引用卡片"]
+</div>
+
+<h4>分块策略（按法律结构切，禁止固定字符切分）</h4>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>知识库</th><th>切分策略</th><th>chunk大小</th><th>overlap</th></tr>
+<tr><td>法律法规</td><td>按"编→章→节→条→款→项"层级，一条一款，注入法律名+章节路径前缀</td><td>512–1024 tokens</td><td>0</td></tr>
+<tr><td>裁判文书</td><td>按"本院查明/本院认为/判决主文"结构段切</td><td>1024–1536 tokens</td><td>10–15%</td></tr>
+<tr><td>合同</td><td><b>条款级(clause-level)切分</b>，以"第X条"为锚点</td><td>512–1024 tokens</td><td>0</td></tr>
+<tr><td>教材/论文</td><td>语义层级+文档级摘要前置(SAC)</td><td>1024 tokens</td><td>200 tokens</td></tr>
+</table></div>
+
+<div class="risk">
+<b>法律幻觉"三道闸门"</b>
+①<b>检索闸门</b>：rerank最高分低于阈值→拒答或声明"现行法未明确"；②<b>生成闸门</b>：prompt写死"只能基于给定法条作答，禁止虚构案号"；③<b>审核闸门</b>：Verifier Agent把生成引用逐条回库校验——法条是否真实存在、是否被废止/修订、条文号与内容是否匹配，不通过则拦截重生成<sup><a href="#src-t14">[T-14]</a></sup>。
+</div>
+
+<h3>4.4 多Agent协作拓扑：1前台 + 4专业 + 1审核</h3>
+<div class="mermaid">
+flowchart TB
+    USER(["用户"])
+    RECEPTION["前台接待Agent 意图识别/多轮追问/情绪安抚"]
+    ROUTER{"案由路由"}
+    ANALYSIS["法律分析Agent IRAC/九步法 调用R1"]
+    CASE["类案检索Agent 要素匹配"]
+    DRAFT["文书起草Agent 模板填充+润色"]
+    REVIEWC["合同审查Agent 条款级风险"]
+    AUDIT["合规审核Agent 引用校验/幻觉检测/免责"]
+    KNOW[("法律知识库 法规/案例/图谱")]
+    TOOLS[("MCP工具集 检索/计算/导出")]
+    USER --> RECEPTION
+    RECEPTION --> ROUTER
+    ROUTER -->|咨询问答| ANALYSIS
+    ROUTER -->|参考判例| CASE
+    ROUTER -->|写文书| DRAFT
+    ROUTER -->|合同审查| REVIEWC
+    REVIEWC --> KNOW
+    ANALYSIS --> TOOLS
+    CASE --> TOOLS
+    DRAFT --> TOOLS
+    ANALYSIS --> AUDIT
+    CASE --> AUDIT
+    DRAFT --> AUDIT
+    REVIEWC --> AUDIT
+    AUDIT -->|通过| USER
+    AUDIT -->|引用错误/幻觉| ANALYSIS
+    AUDIT -->|高风险/拒答| USER
+</div>
+
+<div class="callout">
+<b>为什么审核Agent必须独立</b>
+法律错误的代价远高于普通问答。Harvey把"citation engine"做成独立子系统；Falkor-IRAC用图约束生成——LLM提案后Verifier检查图谱中是否存在支持路径，无路径则拒绝输出<sup><a href="#src-t14b">[T-14b]</a></sup>。这是法律AI可信度的关键，也是它区别于普通Chatbot的本质。
+</div>
+
+<h3>4.5 法律推理工程化：IRAC × 要件审判九步法</h3>
+<p>不要指望模型自己"像律师一样思考"，而要把IRAC（Issue争议焦点→Rule法律依据→Application涵摄→Conclusion结论）拆成LangGraph显式节点，每步强制产出结构化JSON，审核节点校验"结论是否被Rule+Application支撑"。</p>
+<div class="mermaid">
+flowchart LR
+    I["Issue 争议焦点 输出争议问题列表"] --> R["Rule 法律依据 RAG检索法条/司法解释"]
+    R --> A["Application 涵摄 事实到要件逐一比对"]
+    A --> C["Conclusion 结论 法律意见+风险"]
+    C --> CHK{"审核校验 结论是否被Rule+A支撑?"}
+    CHK -->|否| R
+    CHK -->|是| OUT["输出带引用卡片"]
+</div>
+<p>进一步把邹碧华"要件审判九步法"固化为节点序列：固定权利请求→识别请求权基础→识别抗辩权基础→基础规范分解→规范要件事实化→诉讼主张证明→事实证明→要件归入→裁判结论。把它写成LangGraph固定节点，比"让模型自由发挥"可靠得多<sup><a href="#src-t13">[T-13]</a></sup>。</p>
+
+<h3>4.6 多模态方案</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>能力</th><th>方案</th><th>说明</th></tr>
+<tr><td>合同/证据图片OCR</td><td>PaddleOCR-VL 1.5（开源可私有化）</td><td>原生支持印章识别、扫描件、手写体、表格<sup><a href="#src-t18">[T-18]</a></sup></td></tr>
+<tr><td>扫描PDF解析</td><td>MinerU 2.6+</td><td>面向Agent/RAG，输出结构化Markdown<sup><a href="#src-t17">[T-17]</a></sup></td></tr>
+<tr><td>语音ASR</td><td>SenseVoice / FunASR</td><td>C端语音入口，中文强、方言可配</td></tr>
+<tr><td>语音TTS</td><td>CosyVoice</td><td>法律播报，普通话为主</td></tr>
+<tr><td>庭审录像理解</td><td>视频抽帧+语音转写+摘要</td><td>远期B端，MVP不做</td></tr>
+</table></div>
+
+<h3>4.7 技术难点与解法</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>难点</th><th>解法</th></tr>
+<tr><td>法律幻觉</td><td>三道闸门+废止法条黑名单+不确定就说不确定</td></tr>
+<tr><td>地方性法规/地域差异</td><td>法规库metadata带"地域"，前台追问事发地，检索地域过滤</td></tr>
+<tr><td>新法/司法解释时效</td><td>每日监听新规，版本化存储，只取现行有效版本</td></tr>
+<tr><td>类案匹配精度</td><td>要素级匹配（案由+情节标签结构化+向量语义融合），非纯文本</td></tr>
+<tr><td>长合同处理</td><td>≤50页走长上下文(128K+)全量审查；&gt;200页走条款级RAG拼上下文</td></tr>
+<tr><td>咨询责任边界</td><td>全程disclaimer，不承诺胜诉，刑事引导找辩护人</td></tr>
+</table></div>
+
+<h3>4.8 推荐技术栈清单（学生起步版：先免费跑通，规范一步到位）</h3>
+<div class="callout"><b>原则：</b>起步期每一项都优先选"有免费额度/可白嫖/学生认证优惠"的实现，但<b>数据schema、检索流程、引用溯源字段按完整版标准设计</b>，避免毕业公司化时推倒重来（详见第十章技术演进对照）。</div>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>类别</th><th>在校起步期（近零成本）</th><th>毕业过渡期/成长期再上</th><th>理由</th></tr>
+<tr><td>Agent编排</td><td><b>Dify 社区版自托管</b>（数据自有、可改源码）+ <b>Coze 免费版</b>（出Demo快）；核心流程尽快用 <b>LangGraph 代码化</b>沉淀，不长期锁死在拖拽平台</td><td>LangGraph 作为核心生产编排（checkpoint/HITL/断点续跑）</td><td>可视化平台适合快速验证，但工作流要可迁移<sup><a href="#src-t24">[T-24]</a></sup></td></tr>
+<tr><td>大模型</td><td><b>只调已备案商用API免费额度</b>：硅基流动免费模型、DeepSeek API、通义·百炼、智谱GLM新用户/学生额度；<b>不自部署、不做自有大模型备案</b></td><td>毕业公司化后自部署 DeepSeek-V3.2(快)+R1(推理)，Qwen3备选</td><td>调已备案API免自有备案，成本接近0<sup><a href="#src-t4">[T-4]</a></sup></td></tr>
+<tr><td>法律小模型</td><td>起步不训，用API+Prompt做案由分类/要素抽取</td><td>Qwen3-4B/8B LoRA微调高频任务，省钱省延迟</td><td>在校期数据量不够，先攒真实问答</td></tr>
+<tr><td>Embedding / Rerank</td><td>用API自带embedding 或 <b>BGE-M3开源模型在免费云/CPU上跑</b></td><td>BGE-reranker-v2-m3 交叉编码重排（自部署）</td><td>稠密+稀疏一体，中文强，可零成本私有化</td></tr>
+<tr><td>向量数据库</td><td><b>PostgreSQL + pgvector</b>（免费云数据库自带）或 Qdrant 开源版本地/免费层</td><td>Qdrant 生产集群（混合向量+payload过滤）</td><td>起步数据量小，pgvector够用、免运维<sup><a href="#src-t21">[T-21]</a></sup></td></tr>
+<tr><td>关键词检索</td><td>PostgreSQL 全文检索（中文pg_trgm/zhparser）起步</td><td>Elasticsearch (BM25) 与向量双路RRF融合</td><td>法条号/案号精确匹配，起步不必上单ES</td></tr>
+<tr><td>图数据库</td><td>起步用关系表存"法条↔司法解释↔指导性案例"三角关系</td><td>Neo4j / FalkorDB 做 GraphRAG</td><td>MVP先做三角关系，不做全量实体图谱<sup><a href="#src-d26">[D-26]</a></sup></td></tr>
+<tr><td>算力/推理</td><td><b>0成本：不碰GPU服务器</b>；需要跑开源模型时用免费Colab/ AutoDL学生券/比赛算力额度</td><td>SGLang（主力）+ vLLM 自部署<sup><a href="#src-t22">[T-22]</a></sup></td><td>在校期无自有算力，靠API+免费算力券</td></tr>
+<tr><td>文档解析</td><td>MinerU 在线API免费额度 / 本地开源版</td><td>MinerU + PaddleOCR-VL 1.5（私有化）</td><td>PDF/合同与扫描件/印章互补<sup><a href="#src-t17">[T-17]</a></sup><sup><a href="#src-t18">[T-18]</a></sup></td></tr>
+<tr><td>可观测/评测</td><td><b>必须做</b>：用Langfuse自托管（免费）或Dify自带日志，建一个几十条的回归集</td><td>RAGAS自动化评测 + 持续eval流水线</td><td>法律AI不能靠"感觉变好"，引用准确率/忠实度必须度量</td></tr>
+<tr><td>部署/托管</td><td>免费云：阿里云/腾讯云/华为云学生机、Serverless免费额度、Vercel/Cloudflare免费层、免费对象存储</td><td>毕业公司化后按流量付费云主机+CDN</td><td>详见第九章零成本技术栈清单表</td></tr>
+</table></div>
+
+<div class="callout">
+<b>一句话技术栈总结（学生起步版）</b>
+公众号/小程序/H5前端 → Dify社区版或Coze编排（核心流程尽快LangGraph代码化）→ 模型只调已备案API免费额度（分析环节用DeepSeek/R1类，日常咨询用便宜快模型）→ RAG起步用pgvector+PG全文检索、元数据带"地域/时效/审级/效力位阶" → 引用强制回链、废止法条拦截 → 全部日志进Langfuse → 法律内容由内部法律专业成员+导师网络抽检。<b>不买GPU、不租服务器、不做自有大模型备案。</b>
+</div>
+
+<h3>4.9 成本控制与模型路由经济学</h3>
+<p>法律对话看似复杂，实则绝大多数请求是"低难度高频"的——用户口语化咨询、文书模板填充、法条解释，完全可以用便宜的快模型（Qwen3-32B或DeepSeek-V3.2类）处理；只有真正需要法律推理的"要件拆解、类案比对"环节，才值得调用贵的推理模型（DeepSeek-R1类，长CoT，慢且贵）。这种<b>按任务路由</b>正是Harvey"单次查询调用数十次小模型"的省钱逻辑：不要把所有请求都打给最贵模型。配合DeepSeek-V4-Flash输入约1元/百万tokens、输出约4元/百万tokens的极低价格<sup><a href="#src-b3">[B-3]</a></sup>，单用户日均咨询成本可控制在0.1–0.3元，文书生成的边际成本仅约0.05–0.2元/份——这是文书能定价19.9–49.9元仍保持95%毛利的根本原因。</p>
+<p>工程上还有两个必须从第一天就建立的习惯。其一是<b>评测（eval）文化</b>：法律AI不能靠"感觉变好了"迭代，必须用Langfuse+RAGAS持续度量三个指标——引用准确率（生成的法条/案号是否真实且现行有效）、忠实度（结论是否被检索到的依据支撑）、拒答率（该拒答时是否拒答）。每次模型或prompt改动都跑回归集，防止"改好一个场景、改坏三个场景"。其二是<b>确定性优先于模型智能</b>：凡是能算的（诉讼费、利息、违约金、N+1）一律走代码计算器，绝不让LLM算；凡是能模板化的（标准起诉状）一律走模板引擎让LLM只填空；只有真正开放的语义理解才交给模型。这种"把不确定性关进笼子"的工程纪律，是法律AI区别于普通聊天机器人的核心。</p>
+
+<div class="callout"><b>学生团队的成本观：</b>在校期用户量小（几百到几千），API免费额度基本够用，<b>真实现金模型账单大概率每月0–几十元</b>；真正要防的是"为了看起来专业而过早自部署、过早买GPU"——那是毕业公司化、有了收入和融资之后才该做的事。但"按任务路由、能算的不让LLM算"这些习惯现在就要养成，否则用户量一上来账单会失控。</div>
+</section>
+
+<section id="s5">
+<h2>五、数据体系</h2>
+<p>中国法律"核心成文法"体量其实不大，但"衍生数据"极庞大：现行有效法律仅约311件、行政法规600余件、司法解释约560件；真正撑起数据厚度的是累计过亿份裁判文书、38万余件规范性文件，以及1.3亿级的商业案例库收录量<sup><a href="#src-d9">[D-9]</a></sup><sup><a href="#src-d10">[D-10]</a></sup>。</p>
+
+<h3>5.1 数据源全景表</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>大类</th><th>数据源</th><th>主要内容</th><th>获取方式/成本</th><th>合规风险</th></tr>
+<tr><td>成文法</td><td>国家法律法规数据库 flk.npc.gov.cn</td><td>法律约311件、行政法规605件、司法解释560件、地方性法规约1.58万件</td><td>官方免费，可合规镜像</td><td>低；注意时效<sup><a href="#src-d1">[D-1]</a></sup></td></tr>
+<tr><td>成文法</td><td>31省级法规规章库</td><td>共38万余件（地方规范性文件32.78万件）</td><td>各省人大官网免费</td><td>低；格式不统一需清洗</td></tr>
+<tr><td>案例</td><td><b>人民法院案例库</b> rmfyalk.court.gov.cn</td><td>指导性+参考案例，2026年已入库5300余件</td><td>官方免费，<b>类案检索最佳锚点</b></td><td>低，官方鼓励使用<sup><a href="#src-d4">[D-4]</a></sup></td></tr>
+<tr><td>案例</td><td>中国裁判文书网</td><td>累计过亿份；2025年上网1097.9万份</td><td>反爬严格、含个人信息</td><td><b>高：批量爬取违规，仅人机查询</b><sup><a href="#src-d7">[D-7]</a></sup></td></tr>
+<tr><td>案例</td><td>商业库 北大法宝/威科/Alpha</td><td>结构化标签、去重、类案聚类</td><td>数万–数十万/年</td><td>中：授权内可用，不可转售<sup><a href="#src-d21">[D-21]</a></sup></td></tr>
+<tr><td>检察</td><td>12309中国检察网</td><td>起诉书/不起诉/抗诉书</td><td>官方免费</td><td>中：需脱敏<sup><a href="#src-d11">[D-11]</a></sup></td></tr>
+<tr><td>企业/信用</td><td>企查查/天眼查/启信宝API</td><td>工商、股东、风险、涉诉</td><td>0.1–1元/次，套餐千元级</td><td>低：授权API<sup><a href="#src-d23">[D-23]</a></sup></td></tr>
+<tr><td>执行</td><td>执行信息公开网</td><td>失信被执行人（实时约874万个）</td><td>免费但反爬严</td><td>中高：批量抓取受限<sup><a href="#src-d13">[D-13]</a></sup></td></tr>
+<tr><td>学术/实务</td><td>法学期刊、合同模板、法考题库</td><td>论文28万+篇、范本</td><td>机构订阅/授权</td><td>中：论文/模板版权需授权</td></tr>
+</table></div>
+
+<div class="risk">
+<b>裁判文书网已不能作为"批量数据主源"</b>
+年上网量从2020年峰值1920万件降至2023年511万件，2024–2025回升至969万、1097.9万份，但反爬严格、上网范围收窄、当事人进一步隐名<sup><a href="#src-d7">[D-7]</a></sup>。<b>全量爬取既不现实也不合规</b>——绕过验证码/IP封禁可能触犯《刑法》285条非法获取计算机信息系统数据罪。产品应通过官方案例库+商业授权提供类案，而非自建爬虫镜像。
+</div>
+
+<h3>5.2 数据规模量级</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>指标</th><th>数值</th><th>时点/来源</th></tr>
+<tr><td>现行有效法律</td><td>约311件</td><td>全国人大常委会，2026-04<sup><a href="#src-d9">[D-9]</a></sup></td></tr>
+<tr><td>司法解释</td><td>约560件</td><td>flk.npc.gov.cn</td></tr>
+<tr><td>地方性法规（现行有效）</td><td>1.4万余件</td><td>司法部2026<sup><a href="#src-d28">[D-28]</a></sup></td></tr>
+<tr><td>各级行政规范性文件</td><td>32.78万件</td><td>省级库合计2024-11<sup><a href="#src-d10">[D-10]</a></sup></td></tr>
+<tr><td>人民法院案例库入库</td><td>3711(2024-02)→5040(2025-07)→5300+(2026-03)</td><td>court.gov.cn<sup><a href="#src-d5">[D-5]</a></sup></td></tr>
+<tr><td>失信被执行人（公布中）</td><td>约874万个</td><td>zxgk 2026-09<sup><a href="#src-d13">[D-13]</a></sup></td></tr>
+<tr><td>北大法宝收录法规/案例/检察文书</td><td>≥320万 / ≥1.3亿 / ≥700万篇</td><td>高校采购标书<sup><a href="#src-d21">[D-21]</a></sup></td></tr>
+<tr><td>CAIL2018训练集</td><td>267.6万刑事案例</td><td>arXiv<sup><a href="#src-d20">[D-20]</a></sup></td></tr>
+<tr><td>DISC-Law-SFT</td><td>约30万条SFT</td><td>复旦DISC<sup><a href="#src-d17">[D-17]</a></sup></td></tr>
+</table></div>
+
+<h3>5.3 法律知识图谱示意</h3>
+<p>法律文本天然层级化（法律→编→章→节→条→款→项）且强交叉引用，纯向量检索召回不准。建议Neo4j存"法条层级+引用+类案+上下级法院"关系，向量库存语义块，ES存全文关键词。</p>
+<div class="mermaid">
+graph TD
+    L["法律: 民法典"] --> A1["第1042条"]
+    L --> A2["第1079条"]
+    A1 -.->|"上位法"| R1["司法解释: 婚姻家庭编解释"]
+    A2 --> C1[("案例: 离婚纠纷")]
+    C1 --> T1["案由: 离婚纠纷"]
+    C1 --> CT["法院: 某中院"]
+    C1 -->|"类案相似"| C2[("案例: 类案")]
+    C1 -->|"适用法条"| A2
+    ENT["当事人企业 脱敏"] -->|"涉诉"| C1
+    JUD["法官 脱敏"] -->|"审理"| C1
+</div>
+<p>图谱节点包括：法规/条文、案例、法院、律所、案由、要件、量刑情节；边包括：<code>属于/引用/上位法/被修订/被废止/适用/类案相似/涉诉/代理</code>。MVP阶段先做"法条↔司法解释↔指导性案例"三角关系，不要一上来做全量实体图谱<sup><a href="#src-d26">[D-26]</a></sup>。</p>
+
+<h3>5.4 存储与检索架构</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>存储</th><th>用途</th><th>代表产品</th></tr>
+<tr><td>数据湖（对象存储）</td><td>原始PDF/HTML/扫描件，留存取证</td><td>MinIO / S3</td></tr>
+<tr><td>关系数据库</td><td>结构化元数据、用户、权限</td><td>PostgreSQL</td></tr>
+<tr><td>全文检索</td><td>法条号/案号精确匹配、多条件过滤</td><td>Elasticsearch</td></tr>
+<tr><td>向量数据库</td><td>语义块检索</td><td>Qdrant / pgvector</td></tr>
+<tr><td>图数据库</td><td>法条层级、引用、类案关系</td><td>Neo4j / FalkorDB</td></tr>
+<tr><td>缓存</td><td>高频法条、案例库热数据</td><td>Redis</td></tr>
+</table></div>
+
+<div class="recommend">
+<b>数据策略三阶段</b>
+Phase1（0–3月）：镜像flk.npc.gov.cn全部成文法+人民法院案例库5300件；接企查查API按需付费；用DISC-Law-SFT+夫子·明察做底座冷启动。Phase2（3–9月）：采购北大法宝/威科授权（明确AI训练条款），建10–20人专家标注团队产出5–10万条高质量指令。Phase3（9–18月）：与法院/律协合作获取脱敏授权数据，建垂直行业知识图谱。<b>MVP不追求"全量爬虫"，而追求"权威小数据+合规授权+高质量标注"</b>。
+</div>
+
+<h3>5.5 数据合规的特别警示</h3>
+<p>数据是法律AI的护城河，也是最容易踩雷的地方。两条红线必须反复强调。其一，<b>已公开的个人信息不等于可以随便商用</b>：最高法入库参考案例"麦某波案"明确，把已公开裁判文书中的当事人信息经筛选、加工、评价后做成商业数据产品，已超出"合理范围"，构成侵犯个人信息权益<sup><a href="#src-d14ref">[D-14]</a></sup>。即使官方文书已隐名，结合工商、执行、庭审数据仍可能反向识别到自然人，合规上即视为"可识别"。因此入库前必须做NER脱敏（姓名保留"张某某"、隐去身份证/手机号/住址/账号），禁止"以人搜案""以企业搜全部涉诉"的人肉功能，不做当事人信用评分或催收线索产品，并留存来源与脱敏日志至少3年。</p>
+<p>其二，<b>著作权上"法条本身无版权，但数据库编排受保护"</b>：法条原文、裁判要旨可合理引用，但商业库（北大法宝、威科）的结构化标注、法条关联、标签体系受汇编作品著作权与反不正当竞争法保护，直接镜像再分发等于高危。这也是为什么商业采购合同必须单独谈判"数据可用于AI训练/内嵌检索"的明确授权——多数标准订阅默认禁止把原始文书入库训练大模型。综合下来，MVP阶段最稳的数据组合是：国家法律法规数据库（免费、无版权争议）+ 人民法院案例库（官方鼓励类案检索）+ 企查查/天眼查授权API（合规、按量付费）+ 开源SFT数据集（DISC-Law-SFT等做冷启动），把钱花在权威小数据与专家标注上，而非爬一个随时可能被封、且有刑事风险的裁判文书网。</p>
+</section>
+
+<section id="s6">
+<h2>六、产品功能蓝图</h2>
+
+<h3>6.1 C端核心功能矩阵</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>模块</th><th>功能说明</th><th>用户痛点</th><th>付费潜力</th><th>MVP优先级</th></tr>
+<tr><td>智能多轮法律咨询</td><td>对话式AI理解案情、追问细节、初步分析</td><td>不知自己有何权利</td><td>引流核心</td><td><b>P0 Must</b></td></tr>
+<tr><td>法条解读</td><td>输入法条号/关键词，大白话解释+适用场景</td><td>法条看不懂</td><td>引流</td><td><b>P0 Must</b></td></tr>
+<tr><td>法律文书生成</td><td>起诉状/答辩状/仲裁申请书/借条/合同模板</td><td>不会写、找律师贵</td><td><b>核心变现</b></td><td><b>P0 Must</b></td></tr>
+<tr><td>赔偿估算器</td><td>工伤/交通事故/N+1/抚养费计算器</td><td>不知能赔多少</td><td>引流+裂变</td><td><b>P0 Must</b></td></tr>
+<tr><td>维权指引/诉讼流程</td><td>先协商→仲裁→起诉，各阶段材料/时间/费用</td><td>不知下一步</td><td>留存</td><td>P1 Should</td></tr>
+<tr><td>证据清单生成</td><td>根据案情列出需准备证据</td><td>不知收集什么证据</td><td>增值</td><td>P1 Should</td></tr>
+<tr><td>类案参考</td><td>类似案例判决结果摘要（脱敏）</td><td>不知法院怎么判</td><td>增值</td><td>P1 Should</td></tr>
+<tr><td>律师匹配/导流</td><td>AI初筛后推荐本地执业律师</td><td>不知找哪个律师</td><td><b>核心变现</b></td><td>P1 Should</td></tr>
+<tr><td>普法内容</td><td>短视频脚本/问答文章</td><td>法律意识淡薄</td><td>获客渠道</td><td>P1 Should</td></tr>
+<tr><td>刑期预测参考</td><td>刑事罪名→量刑区间参考</td><td>家属急切想知</td><td>高但风险大</td><td>P2 Could（须强免责）</td></tr>
+<tr><td>合同审查(C端)</td><td>上传合同标出风险点</td><td>租房/劳动/借款合同不敢签</td><td>增值</td><td>P2 Could</td></tr>
+</table></div>
+
+<h3>6.2 功能优先级矩阵（用户价值 × 实现成本）</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th></th><th>低成本</th><th>中成本</th><th>高成本</th></tr>
+<tr><td><b>高用户价值</b></td><td>✅ P0必做：智能咨询、法条解读、赔偿估算器、诉讼费计算器、基础文书生成</td><td>⚡ P1应做：律师导流、维权指引、证据清单、普法矩阵</td><td>🔮 P2可做：类案参考、C端合同审查</td></tr>
+<tr><td><b>中用户价值</b></td><td>P1：诉讼流程指引、复杂文书生成</td><td>P2：企业知识库（轻量版）</td><td>P3：刑期预测、案件管理</td></tr>
+<tr><td><b>低用户价值</b></td><td>P3：法律费用保险、智能硬件</td><td>P3：尽职调查</td><td>❌ 暂不做：私有化部署、政务终端</td></tr>
+</table></div>
+
+<h3>6.3 MVP功能清单（3个月内交付）</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>功能</th><th>为什么必须做</th></tr>
+<tr><td>微信小程序端</td><td>获客成本最低、无需下载、社交裂变</td></tr>
+<tr><td>智能多轮咨询（劳动/交通/借贷/离婚4场景）</td><td>核心流量入口，用户第一触点</td></tr>
+<tr><td>法条速查与大白话解读</td><td>建立专业信任，SEO长尾流量</td></tr>
+<tr><td>赔偿估算器（N+1/工伤/交通事故）</td><td>工具属性强、易传播、用户主动分享</td></tr>
+<tr><td>基础文书生成（起诉状/仲裁申请书/借条/离婚协议）</td><td>第一笔付费收入，19.9–49.9元/份</td></tr>
+<tr><td>律师匹配导流（毕业公司化后再建，在校期先接法援中心/12348）</td><td>未来变现闭环，抽佣15–20%</td></tr>
+<tr><td>用户反馈与评分机制</td><td>数据飞轮起点，优化回答质量</td></tr>
+<tr><td>内容发布后台（普法短文/FAQ）</td><td>SEO+抖音引流落地页</td></tr>
+</table></div>
+
+<h3>6.4 交互形态选择</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>形态</th><th>优势</th><th>劣势</th><th>冷启动适配</th><th>建议</th></tr>
+<tr><td><b>微信小程序</b></td><td>无需下载、社交裂变、微信支付闭环</td><td>留存弱、推送受限</td><td>★★★★★</td><td><b>MVP首选</b></td></tr>
+<tr><td>抖音/快手小程序</td><td>内容即服务、短视频挂载转化</td><td>留存极低、决策浅</td><td>★★★★</td><td><b>引流主阵地</b></td></tr>
+<tr><td>H5网页</td><td>开发快、SEO友好</td><td>留存差、微信内受限</td><td>★★★</td><td><b>SEO辅助</b></td></tr>
+<tr><td>独立App</td><td>功能完整、推送强</td><td>获客成本5–20元/安装、周期长</td><td>★★</td><td>V2再考虑</td></tr>
+<tr><td>企微/飞书插件</td><td>B端付费强</td><td>冷启动无企业资源</td><td>★★</td><td>V2 B端切入</td></tr>
+</table></div>
+<div class="callout"><b>结论：</b>MVP = 微信小程序（主产品）+ 抖音/快手号（引流）+ H5问答页（SEO），三端共用后端，前端轻量化。</div>
+</section>
+
+<section id="s7">
+<h2>七、合规与风险</h2>
+<p>合规是法律AI的生死线，不是收尾工作。一个法律AI对话产品同时落入"生成合成类算法+深度合成+生成式AI服务"三个范畴，三部规章叠加适用<sup><a href="#src-c1">[C-1]</a></sup>。</p>
+
+<h3>7.1 监管框架与备案要求</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>备案事项</th><th>触发条件</th><th>受理/终审</th><th>周期</th></tr>
+<tr><td>算法备案</td><td>具有舆论属性/社会动员能力</td><td>属地网信办初审→国家网信办终审</td><td>约2–4个月</td></tr>
+<tr><td>深度合成算法备案</td><td>深度合成服务提供者/技术支持者</td><td>同一系统beian.cac.gov.cn</td><td>约2–4个月</td></tr>
+<tr><td><b>生成式AI服务备案（大模型备案）</b></td><td>面向公众提供（自研/微调模型）</td><td>省级复审+征求多部门意见→国家公示</td><td><b>约4–8个月</b><sup><a href="#src-c4">[C-4]</a></sup></td></tr>
+<tr><td>生成式AI应用登记</td><td>仅API调用已备案模型、未自研</td><td>地方网信办登记</td><td>较短</td></tr>
+</table></div>
+<p>截至2026年8月31日，全国仅1112款生成式AI服务完成备案<sup><a href="#src-c4">[C-4]</a></sup>。"免费"不豁免备案——面向公众提供即须备案；通过API调用已备案模型的应用，须在显著位置公示所用模型名称及备案号。</p>
+
+<div class="recommend">
+<b>学生期的最轻合规路径（关键省钱省时间点）</b>
+国家生成式AI服务备案周期约4–8个月、需企业主体与完整材料，<b>在校期、未注册公司阶段不要去碰"自部署大模型亲自备案"这条路</b>。正确做法：<b>只调用已备案商用模型API（DeepSeek/通义/智谱/硅基流动等均已备案），并在产品页底部公示所用模型名称及备案号</b>——这样大模型本身的备案责任在模型方，学生团队只需按地方网信办要求做"生成式AI应用登记"，负担最轻。等毕业注册公司、用户量与收入起来、确有必要自部署开源模型时，再以公司主体补做国家生成式AI与算法双备案。<b>一句话：现在借别人的已备案模型，毕业再建自己的合规主体。</b>
+</div>
+
+<h3>7.2 法律服务资质边界（生死线）</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>主体</th><th>可从事</th><th>不可从事</th></tr>
+<tr><td>律师/律所</td><td>全部诉讼代理、刑事辩护、法律咨询、代书</td><td>—（特许垄断）</td></tr>
+<tr><td>基层法律服务工作者</td><td>辖区民事/行政代理、调解、咨询、代书</td><td><b>刑事辩护/代理</b>；跨辖区受限</td></tr>
+<tr><td>法律咨询公司</td><td>日常咨询、普通文书草拟、非诉信息</td><td><b>诉讼代理、出庭立案、刑事辩护、会见</b>；不得以律师名义<sup><a href="#src-c9">[C-9]</a></sup></td></tr>
+<tr><td><b>AI公司（本项目）</b></td><td>法律信息检索、知识科普、文书模板、类案展示、风险提示</td><td>同咨询公司，且不得冒充律师</td></tr>
+</table></div>
+<p>《律师法》第13条：未取得执业证书不得以律师名义从事法律服务；第55条：无证以律师名义执业，没收违法所得并处1–5倍罚款。</p>
+
+<h3>7.3 推荐合规业务架构（用户—AI平台—律所）</h3>
+<div class="mermaid">
+flowchart TB
+    User["用户（普通民众）"]
+    subgraph Platform["AI技术平台（本项目）"]
+        L1["L1 法律知识科普/法条检索 低风险"]
+        L2["L2 通用文书模板生成 模板+风险提示"]
+        L3["L3 个性化法律分析/文书 AI生成+仅供参考"]
+        Guard["敏感场景识别引擎 刑事/未成年/国家秘密"]
+    end
+    User -->|"免费/订阅"| L1
+    User -->|"免费/订阅"| L2
+    User -->|"描述案情"| L3
+    L3 --> Guard
+    L1 --> Disclaimer["显著提示: AI工具, 不构成法律意见"]
+    L2 --> Disclaimer
+    L3 --> Disclaimer
+    Guard -->|"普通民事/商事"| L3
+    Guard -->|"刑事/重大财产/未成年/敏感"| Handoff["强制转人工通道"]
+    Handoff --> LawFirm["合作律师事务所（独立法人）"]
+    LawFirm --> Lawyer["持证执业律师"]
+    LawFirm -->|"独立签约/独立收费/独立担责"| User
+    Platform -.->|"技术服务费（固定, 非案源分成）"| LawFirm
+    LawFirm -.->|"律师审核背书"| L3
+</div>
+<p>架构要点：三层服务分层（L1纯信息→L2模板→L3 AI辅助分析）；敏感场景强制熔断；律所是独立法人，仅签技术服务协议收固定技术费，委托合同由律所与用户直签、律师费不经平台手；L3付费深度服务由合作律师审核后交付，责任在律所<sup><a href="#src-c18">[C-18]</a></sup>。</p>
+
+<div class="callout"><b>学生期怎么落地这套架构（不养律师、不分成）：</b>在校期不需要现在就签商业律所、设计案源分成。把"转人工出口"先接到<b>学校法律援助中心、法学院实践教学基地、12348公共法律服务热线</b>这些已有公益渠道；法律内容质量由<b>团队内部法律专业成员 + 其法学院导师网络</b>做抽检与把关节点设计（导师指导学生项目通常不另付顾问费）。等毕业注册公司、要做律师导流变现时，再按上图与本地律所签固定技术服务协议——届时才需要商业律师网络。</div>
+
+<h3>7.4 敏感场景处理策略表</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>场景</th><th>风险等级</th><th>AI处理策略</th><th>转人工机制</th></tr>
+<tr><td>刑事案件（咨询/会见/取保/辩护）</td><td>极高</td><td>仅做普法概念介绍，<b>不得给具体辩护策略、不得指导如何供述</b></td><td>立即转刑辩律师，提示12348法援</td></tr>
+<tr><td>未成年人案件</td><td>高</td><td>识别&lt;14岁暂停自动答复，提示监护人陪同</td><td>转熟悉未成年人案件律师/法援</td></tr>
+<tr><td>离婚/婚姻家庭</td><td>中</td><td>普法+财产分割一般规则，不挑拨矛盾、不教唆隐匿财产</td><td>复杂财产分割转婚姻家事律师</td></tr>
+<tr><td>信访/群体性事件</td><td>高</td><td>不煽动串联，仅告知合法维权途径</td><td>引导正规法援/信访渠道</td></tr>
+<tr><td>国家秘密/危害国安</td><td>极高</td><td>立即拒绝，停止会话并留存记录</td><td>不转律师，依法报告主管部门</td></tr>
+<tr><td>帮助毁灭/伪造证据/串供</td><td>极高（触刑）</td><td>明确拒绝，告知刑法306/307条后果</td><td>不转律师，保存记录</td></tr>
+</table></div>
+
+<h3>7.5 合规红线清单</h3>
+<div class="risk">
+<b>【必须做】合规底线，缺一不可</b>
+1. 完成生成式AI+算法"双备案"后才能上线；2. 每次AI输出持续标注"AI工具、不构成法律意见、不替代律师"；3. 建投诉举报、内容安全、违法输入拦截机制；4. 刑事辩护/会见/取保/出庭100%转持证律师；5. 敏感个人信息单独同意、数据最小化、加密存储、限期删除；6. 用境内已备案模型、境内存储，不直接调境外API处理中国用户数据；7. 用户协议设责任限制+风险提示并保留确认记录；8. 重大财产/诉讼时效/刑事风险主动触发转律师通道。
+</div>
+<div class="risk">
+<b>【禁止做】触碰即红线</b>
+1. 禁用"律师/法律顾问/包赢/100%胜诉/不赢不收费"话术；2. 禁止AI生成代理词/辩护词无律师审核即交法院，禁止代为出庭/立案/会见；3. 禁止与律所案源分成、挂靠资质、代持合伙、咨询公司实控律所；4. 禁止引导毁灭/伪造证据、串供；5. 禁止处理&lt;14岁未成年人咨询无监护人同意；6. 禁止在AI文书上标注"AI律师出具"或冒充律师签章、伪造裁判文书；7. 禁止将用户咨询数据用于训练而不单独同意、禁止出境/出售。
+</div>
+
+<div class="callout">
+<b>输出责任划分（最高法2026意见）</b>
+错误法律建议致用户损失原则上按<b>过错责任</b>归责——平台若已尽风险提示、人工复核、及时更正义务可显著减责；无实物载体的法律AI对话服务排除在产品责任无过错责任之外（有利）；AI自动生成侵权内容参照"避风港规则"，经通知后须及时止损。但<b>免责声明不是万能通行证</b>：若明知AI存在系统性错误仍放任输出，仍可能被认定过错<sup><a href="#src-c7">[C-7]</a></sup><sup><a href="#src-c23">[C-23]</a></sup>。建议要求合作律所投律师执业责任险，自身投保网络安全责任险+科技产品E&O保险。
+</div>
+
+<h3>7.6 免责声明与话术纪律</h3>
+<p>合规不是挂一条用户协议就完事，而是要在产品的每一个触点上持续、显著地传递"AI工具、不替代律师"的信号。具体而言：每次AI输出法律相关内容时，底部都应重复提示，而非只在用户协议里藏一条；涉及诉讼时效、重大财产权益、刑事风险时主动弹出"建议咨询持证律师"并给出转人工入口；所有AI生成内容标注"AI生成"，并提示用户提交法院时须自行核实并披露AI使用情况——最高法2026意见明确，诉讼参与人对AI生成的诉讼文书、案例检索报告负有核实说明义务，不得以"AI幻觉"免责。</p>
+<p>话术纪律上，DoNotPay案给出了最直接的教训：FTC处罚的核心不是它做了AI法律咨询，而是它<b>在未做任何准确性测试、未聘请律师验证的情况下，对外宣称"机器人律师可替代真人"</b><sup><a href="#src-f13">[F-13]</a></sup>。对应的正确姿势是：永远自称"法律AI工具/助手"，绝不称"律师/法律顾问"；广告中突出工具属性与免费普法价值，绝不作结果承诺；对L3个性化输出坚持有持证律师抽样审核、建立可对外说明的质量评估机制——这既是合规要求，也是把"信任"做成产品壁垒的方式。2025–2026年郑州、泉州等地已专门出台规定，穿透认定法律咨询公司实质控制律所、案源分成等合作，传统"挂靠/联营"模式已被明确封堵，本项目必须从第一天就采用纯中立技术平台模式。</p>
+</section>
+
+<section id="s8">
+<h2>八、商业模式</h2>
+
+<h3>8.1 商业模式对比</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>模式</th><th>客单价参考</th><th>优势</th><th>劣势</th><th>适用阶段</th></tr>
+<tr><td>C端免费+会员订阅</td><td>29–99元/月，199–399元/年</td><td>经常性收入、粘性</td><td>付费习惯弱、转化2–5%</td><td>V1验证</td></tr>
+<tr><td><b>C端按次付费（文书/咨询）</b></td><td>文书19.9–49.9元/份；深度咨询9.9–29.9元/次</td><td>即时付费、决策轻、边际成本近零</td><td>单客价值低、需大流量</td><td><b>MVP核心</b></td></tr>
+<tr><td><b>律师导流佣金</b></td><td>成案抽佣10–30%</td><td>客单高、零交付成本</td><td>需律师网络、成案率不稳</td><td><b>MVP核心变现</b></td></tr>
+<tr><td>B端SaaS订阅</td><td>0.8–1.5万/年基础版，1.5–2.8万/年专业版</td><td>ARR高、续约80%+</td><td>销售周期长、需POC</td><td>V2（第6月后）</td></tr>
+<tr><td>B端私有化部署</td><td>10–50万/项目</td><td>大单、政府/大企业偏好</td><td>定制重、交付成本高</td><td>V3</td></tr>
+<tr><td>政府/法律援助采购</td><td>区县法援50–120万/年；智慧法庭43–170万/标</td><td>稳定、背书强</td><td>资质门槛高、回款慢</td><td>V2–V3</td></tr>
+<tr><td>广告/流量变现</td><td>CPA/CPC</td><td>轻量</td><td>损伤体验、量级有限</td><td>辅助</td></tr>
+</table></div>
+
+<h3>8.2 定价参考（2024–2026实际数据）</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>产品</th><th>定价</th><th>时点</th></tr>
+<tr><td>法天使合同模板</td><td>单个6–24元/份，简单模板0元</td><td>2026.09<sup><a href="#src-b2">[B-2]</a></sup></td></tr>
+<tr><td>幂律吾律（企业版）</td><td>专业版9999元/年；高级版18999元/年</td><td>2026.08<sup><a href="#src-b8">[B-8]</a></sup></td></tr>
+<tr><td>JurisAI法律SaaS</td><td>基础0.8–1.5万/年；专业1.5–2.8万/年；企业2.8–5万/年</td><td>2025.11<sup><a href="#src-b6">[B-6]</a></sup></td></tr>
+<tr><td>华律网C端VIP</td><td>99元/月；律师端成案抽佣10–20%</td><td>2025.11</td></tr>
+<tr><td>智能小律通</td><td>AI咨询0.5元/次起；律师抽佣30%</td><td>2026.01<sup><a href="#src-b7">[B-7]</a></sup></td></tr>
+<tr><td>代书法律文书（律师原价）</td><td>300–3000元/件</td><td>临沂律协2024<sup><a href="#src-b12">[B-12]</a></sup></td></tr>
+<tr><td>民事案件代理费（标的累进）</td><td>10万以下5%(最低5000元)；100–1000万3%</td><td>各地律协2025</td></tr>
+</table></div>
+
+<h4>建议本产品定价</h4>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>产品/服务</th><th>建议定价</th><th>对比律师原价</th><th>目标毛利</th></tr>
+<tr><td>AI咨询（基础）</td><td>免费（每日3轮）</td><td>300–1000元/小时</td><td>引流</td></tr>
+<tr><td>AI深度咨询</td><td>29.9元/月 或 9.9元/次</td><td>—</td><td>85%+</td></tr>
+<tr><td>文书生成（简单：借条/起诉状）</td><td>19.9元/份</td><td>律师300–800元</td><td>95%+</td></tr>
+<tr><td>文书生成（复杂：仲裁申请书/合同）</td><td>49.9元/份</td><td>律师800–3000元</td><td>95%+</td></tr>
+<tr><td>律师匹配导流</td><td>用户免费，律师端抽佣15–20%</td><td>—</td><td>90%+</td></tr>
+<tr><td>年度会员（C端）</td><td>199元/年</td><td>—</td><td>80%+</td></tr>
+<tr><td>中小企业AI法务版</td><td>3999元/年起</td><td>常年法顾1–5万/年</td><td>75%+</td></tr>
+</table></div>
+
+<h3>8.3 获客渠道</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>渠道</th><th>方式</th><th>预估CAC</th><th>转化参考</th><th>优先级</th></tr>
+<tr><td>抖音/快手普法短视频</td><td>每日1–2条挂载小程序</td><td>5–15元/注册</td><td>视频→小程序3–8%</td><td>★★★★★</td></tr>
+<tr><td>小红书图文</td><td>"劳动仲裁全流程"等长尾词</td><td>3–10元/注册</td><td>收藏→转化5–10%</td><td>★★★★</td></tr>
+<tr><td>SEO问答</td><td>布局"XX怎么赔偿"长尾词</td><td>1–5元/UV</td><td>搜索用户转化8–15%</td><td>★★★★</td></tr>
+<tr><td>微信私域裂变</td><td>"分享免费生成一份文书"</td><td>&lt;2元/新客</td><td>裂变系数1.2–1.5</td><td>★★★★</td></tr>
+<tr><td>律所/社区/工会合作</td><td>本地互推、社区普法</td><td>按效果分成</td><td>精准但量小</td><td>★★★</td></tr>
+</table></div>
+<div class="recommend"><b>收入引擎判断：</b>第一年核心不是会员费，而是"律师导流佣金"。AI免费做流量入口，真人律师做变现出口，毛利率可达55–60%；文书生成是最佳按次付费切入点，每份token成本仅约0.05–0.2元，定价19.9–49.9元感知性价比极高。</div>
+</section>
+
+<section id="s9">
+<h2>九、落地路线图与近零成本资源估算（学生版）</h2>
+<p>本章把 V1 那套"8人团队、首年200万"的落地方案，换成<b>在校兼职团队、边上课边做、现金压到千元级</b>的现实版本。核心结论先行：<b>第一年真实现金支出约 450–1600 元（最低可压到约 450 元），上限绝不超过 10 万元；其余全部靠学生免费云额度、大创经费、比赛奖金、郑州本地补贴与免费工位覆盖。</b></p>
+
+<h3>9.1 低成本启动资源清单（整合学生创业资源调研）</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>资源</th><th>金额 / 免费额度</th><th>申请条件</th><th>申请渠道</th></tr>
+<tr><td>阿里云"云工开物"百炼学生券</td><td>每12个月 300 元无门槛抵扣金</td><td>高校学生在线认证</td><td>university.aliyun.com</td></tr>
+<tr><td>阿里云学生机 ECS</td><td>99 元/年（2核2G，可续费同价）</td><td>学生认证</td><td>阿里云学生机活动页</td></tr>
+<tr><td>腾讯云校园轻量服务器</td><td>约 58 元/6个月、112 元/年</td><td>25岁以下免认证</td><td>cloud.tencent.com</td></tr>
+<tr><td>GitHub Student Pack</td><td>Copilot Pro 免费 + Azure 100美元 + MongoDB 50美元 + 免费域名等</td><td>在校学生+学校邮箱/学信网</td><td>education.github.com/pack</td></tr>
+<tr><td>硅基流动 SiliconFlow</td><td>注册送 2000 万 tokens</td><td>注册</td><td>cloud.siliconflow.cn</td></tr>
+<tr><td>火山方舟（豆包）</td><td>每个新模型 50 万 tokens；知识库免费版100万tokens</td><td>注册火山引擎</td><td>volcengine.com</td></tr>
+<tr><td>魔搭 ModelScope</td><td>100 小时免费 GPU + 每日 2000 次免费 API</td><td>注册绑阿里云</td><td>modelscope.cn</td></tr>
+<tr><td>百度 AI Studio</td><td>每日送算力点，可兑 V100 16GB 免费 GPU</td><td>注册</td><td>aistudio.baidu.com</td></tr>
+<tr><td>Zilliz / Qdrant / Supabase</td><td>永久免费档（向量库5GB/数据库500MB/5万MAU）</td><td>注册，无需绑卡</td><td>zilliz.com.cn；supabase.com</td></tr>
+<tr><td>Dify 社区版</td><td>自部署完全免费、无调用量上限</td><td>自行 Docker 部署</td><td>github.com/langgenius/dify</td></tr>
+<tr><td>国家级大创经费</td><td>1–2 万元/项；创业实践项目可达 10 万元</td><td>每年3–6月学校教务处申报</td><td>本校创新创业学院</td></tr>
+<tr><td>郑州一次性创业开业补贴</td><td>市区 1 万元（县市5000元）</td><td>在校生/毕业5年内，注册个体户或企业、正常经营满1年</td><td>郑州市人社局/zz.hnzwfw.gov.cn</td></tr>
+<tr><td>个人创业担保贷款</td><td>最高 30 万元，财政贴息 50%</td><td>高校毕业生等重点群体</td><td>创业地县区人社局</td></tr>
+<tr><td>重点群体税费扣减</td><td>个体户3年内每年 2 万元（可上浮20%至2.4万）</td><td>毕业年度高校毕业生持就业创业证</td><td>主管税务机关</td></tr>
+<tr><td>免费工位/孵化空间</td><td>郑大国家大学科技园免费工位+网络；航空港区最长3年50㎡免费</td><td>在校/毕业5年内团队</td><td>zzu.edu.cn/nsp；航空港区创业专班</td></tr>
+<tr><td>法学院法律诊所/法援中心</td><td>免费做案例库、合规评审、用户访谈、指导教师</td><td>以社会实践/校企合作形式</td><td>本校法学院团委/系办</td></tr>
+</table></div>
+
+<h3>9.2 大学生比赛日历（大三→大四，2026秋–2027秋）</h3>
+<p>注意：2026 年中国国际大学生创新大赛全国报名已于 2026-09-25 截止，因此 <b>2026 秋冬只做产品打磨与观摩，主战场放在 2027 赛季</b>。三条线（大创、中国国际大学生创新大赛、挑战杯课外学术）共用同一套产品和商业计划书，边际成本极低。</p>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>时间</th><th>要做的事</th><th>对应赛事/项目</th></tr>
+<tr><td>2026年10–12月</td><td>MVP上线；旁听国赛学BP；注册个体工商户拿微信支付；联系法学院导师做指导教师</td><td>观摩中国国际大学生创新大赛2026国赛（11月）、挑战杯创业计划竞赛决赛</td></tr>
+<tr><td>2027年1–2月（寒假）</td><td>集中开发；组队、定指导教师、写申报书初稿</td><td>备赛</td></tr>
+<tr><td>2027年3–4月</td><td><b>大创校内申报启动</b>；提交申报书、学院评审</td><td>大学生创新创业训练计划（首笔确定的无稀释小钱）</td></tr>
+<tr><td>2027年5月</td><td>大创系统截止（多校5月中下旬）；校级决赛；准备大赛路演BP</td><td>大创校/省/国推荐；挑战杯课外学术校赛（2027奇数年）</td></tr>
+<tr><td>2027年6月</td><td>大创立项公示、拿经费；校内大赛选拔</td><td>大创立项；中国国际大学生创新大赛2027校内选拔</td></tr>
+<tr><td>2027年7–8月（暑假）</td><td>全国系统报名（参考8.10开放）；校赛初赛、省赛复赛</td><td>中国国际大学生创新大赛2027全国报名</td></tr>
+<tr><td>2027年9月（大四上）</td><td>报名截止（参考9.25）；省赛网评与复赛</td><td>大赛报名截止；省赛复赛</td></tr>
+<tr><td>2027年10–11月</td><td>省赛金银奖排位；国赛网评与现场总决赛；对接投融</td><td>中国国际大学生创新大赛2027全国总决赛（11月）</td></tr>
+</table></div>
+<div class="callout"><b>奖金预期：</b>国赛金奖高校普遍配套 5–10 万元/项；河南省教育厅对国赛金银奖另有省级奖励；进国赛后自动进入大赛投融对接（2025年大赛达成投资意向约90亿元）。法律AI项目建议同时报高教主赛道 + 红旅赛道（"基层普法/乡村法律AI"叙事）双线。</div>
+
+<h3>9.3 零成本技术栈清单（服务 / 免费额度 / 超出后成本）</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>服务</th><th>免费额度</th><th>超出后成本（参考）</th></tr>
+<tr><td>大模型推理</td><td>硅基流动2000万tokens + 火山每模型50万 + 百炼300元券 + DeepSeek Flash</td><td>DeepSeek Flash 输入约2元/百万tokens、输出约8元/百万，极低价</td></tr>
+<tr><td>编排/RAG</td><td>Dify 社区版自部署（0授权费、无上限）或 Coze 每日500资源点</td><td>进阶版按订阅；Dify 仅承担服务器费</td></tr>
+<tr><td>后端/服务器</td><td>阿里云99元/年学生机 或 腾讯云112元/年</td><td>2核2G跑Dify+pgvector足够前数千用户</td></tr>
+<tr><td>向量库</td><td>Zilliz免费档5GB 或 Qdrant免费单节点 或 Supabase自带pgvector</td><td>升级约25美元/月起</td></tr>
+<tr><td>Embedding</td><td>开源 bge-m3 在学生机CPU自托管，或调免费embedding API</td><td>0软件费</td></tr>
+<tr><td>GPU训练/微调</td><td>AI Studio每日免费V100 16GB + 魔搭100小时GPU</td><td>7B级QLoRA只需8–16GB显存，免费额度内可做法律embedding微调</td></tr>
+<tr><td>可观测/网关</td><td>Langfuse 自托管 + One-API/New-API 统一管理各家key</td><td>0授权费</td></tr>
+<tr><td>开发协作</td><td>GitHub Student Pack（Copilot Pro免费）+ Actions免费额度</td><td>0</td></tr>
+</table></div>
+
+<h3>9.4 按学期行动路线图（边上课边做）</h3>
+<div class="mermaid">
+gantt
+    title 学生团队按学期路线（2026秋 – 2027秋，大三→大四）
+    dateFormat YYYY-MM-DD
+    axisFormat %Y-%m
+    section 大三上 2026秋
+    校园用户访谈与最小知识库 :a1, 2026-10-01, 45d
+    MVP上线 小程序/H5 :milestone, a2, 2026-11-15, 0d
+    观摩国赛 写商业计划书 :a3, 2026-11-01, 60d
+    section 寒假 2027初
+    集中开发 文书生成与估算器 :b1, 2027-01-15, 45d
+    大创申报书初稿 :b2, 2027-02-01, 30d
+    section 大三下 2027春
+    大创申报与立项 :c1, 2027-03-15, 60d
+    法援社团与实践基地合作 :c2, 2027-03-01, 60d
+    种子用户群与普法账号运营 :c3, 2027-03-01, 120d
+    section 暑假 2027夏
+    备赛与路演打磨 :d1, 2027-07-01, 60d
+    大赛全国报名 :d2, 2027-08-10, 45d
+    section 大四上 2027秋
+    省赛复赛与网评 :e1, 2027-09-01, 60d
+    冲国赛总决赛 :milestone, e2, 2027-11-01, 0d
+    毕业公司化决策 :e3, 2027-11-15, 45d
+</div>
+
+<h3>9.5 学生创始团队最小配置（2–5人，按角色不按人头）</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>角色</th><th>职责</th><th>可否由导师/外脑替代</th><th>是否必须核心成员</th></tr>
+<tr><td>核心技术成员</td><td>搭Dify/LangGraph、做RAG、维护小程序与后端</td><td>否，必须自己人</td><td><b>必须</b></td></tr>
+<tr><td>法律专业成员（法务角色）</td><td>设计推理逻辑、文书模板、抽检AI输出、合规调研</td><td>专业判断须核心成员；<b>疑难把关由法学院导师/法律诊所做外脑，不必外聘付费律师</b></td><td><b>必须</b></td></tr>
+<tr><td>运营/增长角色</td><td>普法账号、社群、校园获客、用户访谈</td><td>可由社团/志愿者分担</td><td><b>必须</b></td></tr>
+<tr><td>可承担涉外与资料工作的成员</td><td>查海外资料、双语内容、涉外场景储备</td><td>可兼职/轮换</td><td>建议有，非必须</td></tr>
+<tr><td>指导教师 / 行业顾问</td><td>比赛背书、合规把关、行业资源引荐</td><td>导师免费担任，<b>不占核心编制、不付顾问费</b></td><td>外脑，非核心</td></tr>
+<tr><td>资深律师/行业合伙人</td><td>毕业公司化后补行业认知与B端客户渠道</td><td>在校期用导师网络+法援中心替代</td><td>毕业时再引入</td></tr>
+</table></div>
+
+<h3>9.6 第一年真实现金支出预算（目标压到 0–10 万，实际千元级）</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>支出项</th><th>年支出</th><th>说明</th></tr>
+<tr><td>微信小程序认证（个体户/企业主体）</td><td>300 元/年</td><td>个人主体免费但无微信支付权限</td></tr>
+<tr><td>云服务器</td><td>99–112 元/年</td><td>学生机2核2G够跑</td></tr>
+<tr><td>域名 + ICP备案</td><td>约 55–80 元/年</td><td>.cn域名首年约29–39元，备案免费</td></tr>
+<tr><td>大模型API超额费</td><td>0–500 元</td><td>免费额度基本覆盖；用户量起来后按量</td></tr>
+<tr><td>向量库/数据库</td><td>0 元</td><td>免费档足够前1000用户</td></tr>
+<tr><td>开发工具</td><td>0 元</td><td>GitHub Student Pack</td></tr>
+<tr><td>工商注册 + 代账</td><td>0–600 元</td><td>注册免费；代账孵化器常免，个体户可先零申报</td></tr>
+<tr><td>比赛差旅/打印/杂项</td><td>0–数千元</td><td>视赛程，多由学校报销或补贴覆盖</td></tr>
+<tr><td><b>第一年现金合计</b></td><td><b>约 450–1600 元（最低约450元）</b></td><td>上限绝不超过10万元</td></tr>
+</table></div>
+<div class="recommend">
+<b>资金来源阶梯（先拿不稀释的钱）：</b>
+① 大创国创经费 1–2 万元（一项即覆盖十年现金支出）→ ② 校级/省级/国赛奖金（数千–数十万）→ ③ 郑州开业补贴 1 万元（注册满1年）+ 税费扣减 2万/年×3年 → ④ 创业担保贷款 30 万（贴息50%，债权不占股）→ ⑤ 毕业前后孵化器种子/天使。<b>只要拿到 1 项国家级大创或省赛以上奖项，首年现金流即为正；在此之前不融资、不让股。</b>
+</div>
+
+<h3>9.7 学生特殊合规与主体问题</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>事项</th><th>学生期建议</th></tr>
+<tr><td>学籍/休学</td><td>优先"在校兼职+学分置换+竞赛推免"路线，<b>不要轻易休学</b>；弹性学制、保留学籍休学创业虽有国家政策托底，但那是拿到大额投资后的可选项，细则看本校</td></tr>
+<tr><td>知识产权归属（关键风险）</td><td>执行学校任务或主要用学校实验室/经费/导师纵向课题做的成果默认归学校。<b>隔离做法：课余自费、用开源API和免费云做，不碰学校服务器与课题经费；组队即签《共同创始人协议》约定成果归团队共有；商标/软著以创始人个人或未来公司名义申请，不以学校名义；若用了大创经费，提前与学院签成果归属与转化协议。</b></td></tr>
+<tr><td>注册公司时机与形式</td><td>MVP期：个人主体小程序验证即可（不能收款）。要收款时：先注册<b>个体工商户</b>（0元、1周、可开微信支付、可领开业补贴）。拿到比赛奖金/天使前：再升级<b>有限责任公司</b>，注册资本10–50万元（认缴制、5年内缴足即可，不必实缴），预留10–15%期权池。</td></tr>
+<tr><td>小程序/公众号主体与支付</td><td>个人主体小程序只能展示、<b>无微信支付权限</b>；个体户与企业主体才能开通小程序支付。这是"为什么MVP后必须注册个体户"的硬原因。</td></tr>
+<tr><td>大模型备案</td><td>只调已备案API、不做微调 → 只需做"生成式AI服务登记"+算法备案，<b>无需自建大模型备案</b>；一旦微调开源底座对外服务就升级为双备案（需企业主体、周期数月），在校期不要碰。</td></tr>
+<tr><td>未成年人用户</td><td>识别到用户&lt;14岁立即暂停自动答复，提示监护人陪同；不收集未成年人个人信息；青少年模式下只做普法概念介绍。</td></tr>
+</table></div>
+
+<h3>9.8 学生团队常见死因与对冲</h3>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>常见死因</th><th>对冲做法</th></tr>
+<tr><td>毕业即散伙（升学/实习/出国各奔东西）</td><td>组队即签股权与分工协议，约定退出机制与股权回购；分阶段承诺可投入时长；升学者转顾问/保留股权，不强行全职</td></tr>
+<tr><td>升学/实习精力崩塔</td><td>代码进Git、数据结构化、核心流程不放在单人脑子里；大四前把流程文档化，任何人可接手</td></tr>
+<tr><td>缺行业资源、不懂真实法律业务</td><td>绑定法学院导师与法律诊所/法援中心做外脑；从校园真实纠纷做起，不做空中楼阁</td></tr>
+<tr><td>技术理想化（沉迷自部署/微调/自研模型）</td><td>守住"在校期只调免费API、不买GPU、不做自有备案"纪律；工程规范照做，但重资产留到毕业有收入后</td></tr>
+<tr><td>过早融资/过早注册公司</td><td>先用比赛奖金和大创把数据跑出来；有真实付费后再谈天使，估值和谈判地位最好</td></tr>
+</table></div>
+
+<h3>9.9 数据飞轮与壁垒（学生版）</h3>
+<p><b>数据飞轮：</b>用户提问→AI生成回答/文书→用户反馈（有用/没用/纠错）→差评对话进法律专业成员+导师审核队列→修正后入标注集→优化prompt与知识库→更好回答→更多用户。每次对话结束弹"这个回答帮到你了吗"，积累的"真实校园/民生咨询 + 导师验证答案"是竞品无法短期复制的核心资产。</p>
+<div class="recommend"><b>关键认知：</b>模型本身不构成壁垒——DeepSeek/Qwen人人能用、免费额度人人能领。学生团队真正的壁垒是<b>校园/民生垂直场景的规则精度 + 导师与法援网络 + "真实问题+验证答案"的数据飞轮 + 比赛打出的品牌背书</b>。这四者都靠时间和免费积累，恰恰是学生最不缺、大公司最懒得做的。</div>
+</section>
+
+<section id="s10">
+<h2>十、未来规划与长期演进</h2>
+<p>本章是 V2 学生版新增的核心章节。学生创业最大的风险不是"做不出来"，而是<b>毕业即散伙、技术做了一堆却不能迁移、拿到第一笔钱时方向已经跑偏</b>。因此本章回答六个问题：四年后这家公司长什么样、现在的简版技术怎么不推倒重来、什么数据信号出现时该走哪条路、零成本阶段该攒下什么资产、钱分几步拿、团队怎么随毕业成长。</p>
+
+<h3>10.1 四阶段成长蓝图</h3>
+<p>以"现在大三、距毕业约1年"为锚点，把未来五年拆成四个阶段。每阶段的目标、里程碑、组织形态与资金来源都不同，<b>核心原则是"用前一阶段的免费资源和真实数据，去换后一阶段的钱和资质"</b>。</p>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>阶段</th><th>时间</th><th>核心目标</th><th>关键里程碑</th><th>组织形态</th><th>资金来源</th></tr>
+<tr><td><b>① 在校验证期</b></td><td>现在–毕业（约0–1.5年，大三→大四）</td><td>不烧钱做出MVP、拿到真实用户与真实问答数据、靠比赛拿背书和奖金</td><td>MVP上线；互联网+省赛/国赛获奖；大创立项；注册用户破万、真实咨询问答数千条</td><td>在校学生兼职小组，导师+法援社团做外脑；不注册公司</td><td>比赛奖金、大创经费、学校场地/算力资源，<b>现金支出0–数万元</b></td></tr>
+<tr><td><b>② 毕业过渡期</b></td><td>毕业–毕业后1.5年（约1.5–3年）</td><td>公司化、跑通付费闭环、决定主攻方向</td><td>注册主体、完成应用登记/必要备案；首笔真实付费收入；签下首批律所/小微企业客户；拿种子/天使</td><td>毕业核心成员全职2–5人，引入1位资深律师/行业顾问做合伙人或外部顾问</td><td>比赛奖金结余、大学生创业补贴/孵化器种子、天使投资</td></tr>
+<tr><td><b>③ 成长期</b></td><td>毕业后3–5年</td><td>产品线成型、区域扩张、自部署模型提效</td><td>月收入百万级；B端SaaS客户数十家；自部署开源底座+SFT上线；团队10–30人</td><td>正规公司，CTO/法律产品负责人/增长负责人各司其职</td><td>Pre-A/A轮、地方政府引导基金</td></tr>
+<tr><td><b>④ 远期平台期</b></td><td>5年以上</td><td>平台化/生态化，或成为大厂/律所集团生态伙伴</td><td>行业级知识库与数据网络；区域标杆案例；具备并购或被并购价值</td><td>成熟公司，行业合伙人与专业化职能团队</td><td>B轮以后/IPO路径，或被并购退出</td></tr>
+</table></div>
+
+<div class="callout">
+<b>大四这道坎：实习/毕设/升学冲击下的交接与转型</b>
+在校期最危险的是"大四"：有人要考研、有人要去律所/互联网实习、有人要做毕设，精力骤降。提前约定三件事：①<b>分阶段承诺</b>——在校期不要求全职，每人按学期承诺可投入时长，升学/出国者转为顾问或股东而非退出；②<b>代码与数据资产化</b>——所有代码进Git、所有问答数据结构化留存，任何人离开都能接手，核心流程不放在某个人脑子里或某个不可导出的平台里；③<b>毕业节点做一次"去留决策"</b>——拿到真实付费数据与比赛成绩后，愿意All in的留下全职、不愿冒险的保留股权转兼职顾问，用协议把股权、分工、退出写清楚（见第九章学生特殊合规）。
+</div>
+
+<h3>10.2 技术架构可扩展性：现在的简版如何平滑长成完整六层</h3>
+<p>学生期用Dify社区版/Coze + 免费API + pgvector，看似"简陋"，但只要<b>第一天就按规范做</b>，它可以无缝演进到第四章那套完整六层架构，而不必推倒重来。下面这张图左边是"在校简版"，右边是"毕业完整版"，中间标注的是<b>现在就要埋好、否则以后要返工的接口</b>。</p>
+
+<div class="mermaid">
+flowchart LR
+    subgraph NOW["在校简版（近零成本）"]
+        N1["公众号/小程序/H5"]
+        N2["Dify社区版 / Coze 编排"]
+        N3["已备案API免费额度"]
+        N4["pgvector + PG全文检索"]
+        N5["官方成文法+案例库"]
+    end
+    subgraph LATER["毕业完整版（公司化后）"]
+        P1["小程序+App+律师工作台"]
+        P2["LangGraph 多Agent生产编排"]
+        P3["API路由 + 自部署DeepSeek/Qwen + 法律小模型"]
+        P4["Qdrant+ES双路RRF + BGE-reranker"]
+        P5["结构化法规库+知识图谱+商业授权数据"]
+        P6["独立合规审核Agent + Langfuse评测"]
+    end
+    N1 -->|"前端可替换,接口不变"| P1
+    N2 -->|"核心流程代码化为LangGraph,不被平台锁死"| P2
+    N3 -->|"加自部署模型做路由,Prompt与schema复用"| P3
+    N4 -->|"换Qdrant/ES,检索字段与元数据先定好"| P4
+    N5 -->|"加图谱与授权数据,沿用同一schema"| P5
+    P6 -.->|"引用溯源/日志埋点从第一天就记录"| P2
+</div>
+
+<h4>现在就要按规范做、避免以后推倒重来的六件事</h4>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>现在就要做的规范</th><th>为什么现在就要做（学生期成本几乎为0）</th></tr>
+<tr><td>① 统一数据Schema</td><td>用户问题、检索结果、生成答案、引用关系从第一天就用固定字段存JSON/表，不要散落在对话日志里；以后换模型、换库、做训练集直接导出</td></tr>
+<tr><td>② 知识库结构化字段</td><td>每条法规/案例入库就带：<b>法律名、条文号、效力位阶（法律&gt;行政法规&gt;司法解释&gt;地方规范性文件）、生效日期、失效日期、修订记录、地域</b>；以后做"只取现行有效版本"和GraphRAG不用回头清洗</td></tr>
+<tr><td>③ 法条效力位阶与版本管理</td><td>新法规出来能标记旧法失效；这是法律AI区别于普通聊天机器人的命根子，存的时候多两个字段，省得毕业时全库返工</td></tr>
+<tr><td>④ 引用溯源字段</td><td>每个结论都记录"引用了哪条法/哪个案例、原文片段、URL"；以后做引用校验Agent、给律师审核留痕，直接可用</td></tr>
+<tr><td>⑤ 用可迁移编排、不被可视化平台锁定</td><td>Dify/Coze用来快速出Demo，但<b>核心工作流尽早用LangGraph这类代码框架重写一遍</b>；避免毕业时流程锁死在某个SaaS里、数据导不出来</td></tr>
+<tr><td>⑥ 日志埋点与评测集</td><td>从第一条真实问答开始记录"用户点了有用/没用"，攒一个几十条的回归测试集；换模型时跑一遍，防止改好一个场景改坏三个</td></tr>
+</table></div>
+<p>这六件事在校期做几乎不花钱（就是建表规范、多存几个字段），但能让毕业公司化后直接叠加自部署模型、双路检索、知识图谱，而不是把现在的产品扔掉重写。</p>
+
+<h3>10.3 发展分叉与决策信号</h3>
+<p>学生团队最容易犯的错，是一上来就把自己定义成"做C端法律AI平台"。实际上做满一年后，真实数据会告诉你该走哪条路。下表列出六条可能的分叉路，以及<b>出现什么数据信号时就该果断转向那条路</b>，而不是凭想象选。</p>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>分叉路线</th><th>出现这些数据信号时选它</th><th>说明</th></tr>
+<tr><td><b>A. C端普惠流量平台</b></td><td>注册用户百万级、月活高、但付费率低、主要靠广告/导流变现</td><td>靠规模和品牌，需要持续获客投入，学生期可先攒流量，但难独立盈利</td></tr>
+<tr><td><b>B. 合同法务SaaS（小微/企业）</b></td><td>付费客户中B端占比过半、客单价数千元/年、续费意愿强、销售可复制</td><td>收入稳定、ARR可预期，是资本最认可的路径；从合同审查/用工合规切入</td></tr>
+<tr><td><b>C. G端智慧司法/法援采购</b></td><td>拿到法院/司法局/法援中心的试点或中标记录、有政府背书案例</td><td>单子大但周期长、要资质和行业关系，通常毕业公司化后、有行业合伙人再进</td></tr>
+<tr><td><b>D. 律师端办案工具</b></td><td>用户中执业律师占比高、留存好、愿按席位付费</td><td>客单高、决策快，但要钻进律师真实工作流（Word/类案/阅卷）</td></tr>
+<tr><td><b>E. 被并购/成为大厂生态伙伴</b></td><td>做到了特定场景深度或区域密度，大厂/律所集团需要这块能力补位</td><td>不必硬撑独立IPO，被通义/百度/头部律所集团收购也是成功退出；保留产品独立性</td></tr>
+<tr><td><b>F. 横向扩品类：法律+财税+知产+保险</b></td><td>现有客户反复问"工商/记账/商标/合同保险"等相邻需求、复购自然外溢</td><td>从法律能力延展到中小微企业"一站式合规服务"，客单价和粘性双升</td></tr>
+<tr><td><b>G. 涉外/双语与海外中文法律服务</b></td><td>有跨境贸易、涉外合同、留学移民等咨询量，或团队能产出双语产品、有华人/东南亚市场需求</td><td>作为差异化补充方向：用中文法律能力服务出海企业或海外华人群体，避开国内红海</td></tr>
+</table></div>
+<div class="recommend"><b>决策纪律：</b>在校期先不锁死方向，用一学期同时观察C端流量和B端/律师反馈；<b>等毕业过渡期结束、有了真实收入结构再做选择</b>。哪条路的付费数据最先跑通，就All in哪条。</div>
+
+<h3>10.4 数据资产长期积累（零成本阶段最该攒的东西）</h3>
+<p>模型人人能调、算力以后能买，<b>真正随时间增值、别人抄不走的，是在校期免费攒下的数据与关系网络</b>。</p>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>要攒的资产</th><th>零成本怎么攒</th><th>长期价值</th></tr>
+<tr><td>真实咨询问答库（脱敏）</td><td>每个用户问题+AI回答+最终律师/导师确认答案，按统一schema留存</td><td>未来做SFT、评测、产品优化的核心燃料，竞品短期抄不到</td></tr>
+<tr><td>用户反馈正负样本</td><td>每次回答后弹"有用吗/哪里不对"，把差评对话单独标记</td><td>直接暴露幻觉点和高频场景，是产品迭代的优先级来源</td></tr>
+<tr><td>专家标注对</td><td>法律专业成员+导师把高频问答标注成"标准问答对/纠错对"</td><td>质量壁垒，也是拿比赛、拿投资时最能讲故事的资产</td></tr>
+<tr><td>合作律所/法援网络</td><td>先从学校法援中心、实践基地、导师推荐的本地律所处起步</td><td>毕业做律师导流、接B端客户时的现成渠道</td></tr>
+<tr><td>品牌账号与私域社群</td><td>抖音/小红书/公众号普法账号+微信社群，从第一批同学开始养</td><td>免费获客渠道，几百个精准私域用户比投流更值钱</td></tr>
+<tr><td>合规与口碑记录</td><td>留存免责声明确认记录、投诉处理记录、内容审核日志</td><td>未来备案、应对监管、被尽调时的信任凭证</td></tr>
+</table></div>
+
+<h3>10.5 融资阶梯全景（学生版：先奖金、后补贴、最后才股权融资）</h3>
+<p>学生创业最反直觉的一点是：<b>最早的钱不该来自投资人，而该来自比赛和政府/学校</b>——它们不占股权、还送背书。股权融资越晚做，估值越高、稀释越少。</p>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>阶段</th><th>典型金额（行业参考区间）</th><th>是否稀释股权</th><th>投资方/来源类型</th><th>什么时候拿</th></tr>
+<tr><td>比赛奖金</td><td>校级数千–数万；省级数万；国赛数万–数十万</td><td>不稀释</td><td>互联网+/挑战杯/各行业赛事组委会</td><td>在校期（校赛4–6月、省赛7–8月、国赛10–11月，以08核实为准）</td></tr>
+<tr><td>大创/科研经费</td><td>国家级1–3万、省级数千–1万</td><td>不稀释</td><td>学校/教育部大创计划</td><td>春季申报，在校期</td></tr>
+<tr><td>地方创业补贴/孵化器</td><td>数万–十余万无偿补贴+免费工位</td><td>不稀释</td><td>郑州市/高新区人社、大学科技园孵化器</td><td>毕业注册主体后</td></tr>
+<tr><td>种子轮</td><td>50万–300万元，估值约1000–3000万，稀释10–20%</td><td>少量稀释</td><td>本地天使、校友天使、孵化器种子基金</td><td>毕业过渡期，有MVP+真实付费数据后</td></tr>
+<tr><td>天使/Pre-A</td><td>300万–1500万元，稀释15–25%</td><td>稀释</td><td>早期VC、法律/企服垂直基金</td><td>付费闭环跑通、方向选定后</td></tr>
+<tr><td>A轮/B轮</td><td>A轮数千万–1亿；B轮1–3亿+，每轮稀释15–25%</td><td>稀释</td><td>成长期VC、政府引导基金</td><td>成长期，产品线成型、收入百万级后</td></tr>
+<tr><td>退出：IPO/并购</td><td>—</td><td>创始人/早期投资人变现</td><td>资本市场，或被大厂/律所集团收购</td><td>远期5年+</td></tr>
+</table></div>
+
+<div class="mermaid">
+flowchart LR
+    A["比赛奖金<br>不稀释"] --> B["大创/补贴<br>不稀释"]
+    B --> C["孵化器种子<br>免费工位+小额"]
+    C --> D["天使/种子<br>50-300万 稀释10-20pct"]
+    D --> E["Pre-A<br>300-1500万"]
+    E --> F["A/B轮<br>数千万-数亿"]
+    F --> G["IPO / 被并购退出"]
+</div>
+<div class="callout"><b>关键节奏：</b>在校期一分股权都不要让——先把比赛奖金和大创经费吃满；毕业注册公司后拿政府补贴和孵化器免费资源；<b>只有在有了真实付费数据、方向清晰后，才在毕业过渡期去谈天使</b>，那时数据在手，估值和谈判地位都最好。</div>
+
+<h3>10.6 团队成长路径（角色随毕业演进）</h3>
+<p>学生团队不需要现在就配齐所有角色，但要清楚每个人将来长成什么、毕业时缺谁。</p>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>在校期角色</th><th>毕业公司化后演进为</th><th>说明</th></tr>
+<tr><td>核心技术成员</td><td>CTO / 技术负责人</td><td>从搭Demo、做RAG，成长为负责架构、自部署模型与工程团队</td></tr>
+<tr><td>法律专业成员（法务角色）</td><td>法律产品负责人 / 合规负责人</td><td>从设计推理逻辑、抽检文书，成长为产品定义与合规把关</td></tr>
+<tr><td>运营/增长角色</td><td>增长负责人 / COO</td><td>从做普法账号、社群，成长为负责获客、B端销售与运营</td></tr>
+<tr><td>可承担涉外与资料工作的成员</td><td>海外/双语业务负责人</td><td>支撑涉外与出海方向</td></tr>
+<tr><td>导师 / 法学院实践基地</td><td>外部顾问 / 早期行业资源</td><td>在校期是外脑，毕业后可转顾问或推荐行业合伙人</td></tr>
+<tr><td>（毕业时需补）资深律师/行业合伙人</td><td>合规与B端资源合伙人</td><td>在校期用导师网络替代；公司化后引入1位有行业资源的资深律师，补行业认知与客户渠道</td></tr>
+</table></div>
+<div class="recommend"><b>最小团队原则：</b>在校期2–5人即可跑通，不必凑齐所有角色；能由导师、社团、外脑替代的，就不占用核心编制。核心成员只保留"能写代码的、懂法律能把关节目的、能做内容和用户的"三类，其余毕业时再补。</div>
+</section>
+
+<section id="s11">
+<h2>十一、推荐方案与未来一学期90天行动</h2>
+
+<div class="recommend">
+<b>推荐技术路线（一句话结论，学生版）</b>
+不自研基座、不自部署、不做自有大模型备案；在校期用"<b>已备案API免费额度（硅基流动/DeepSeek/通义/智谱）+ Dify社区版自托管或Coze免费版 + 免费云 + pgvector</b>"跑通MVP，核心流程尽早用LangGraph代码化、不被拖拽平台锁死；数据schema、法条效力位阶、引用溯源、日志埋点按完整版标准做。毕业公司化后再叠加自部署DeepSeek/Qwen的法律SFT。
+</div>
+
+<div class="recommend">
+<b>推荐MVP范围（先打校园身边场景）</b>
+先做微信小程序/公众号或H5，聚焦<b>兼职/实习劳动纠纷（欠薪、N+1、工伤）、租房押金、校园贷/培训贷、消费维权、简单借条与劳动仲裁文书</b>；交付智能多轮咨询、法条大白话解读、赔偿/费用估算器、文书按次生成四个P0功能。法律内容由内部法律专业成员+导师网络抽检，转人工出口先接学校法援中心与12348。
+</div>
+
+<div class="recommend">
+<b>推荐合规架构（学生最轻路径）</b>
+纯工具定位：L1科普/L2模板/L3 AI辅助分析三层，敏感场景强制熔断；只调已备案模型API并公示模型备案号、做地方网信办应用登记；在校期不代收律师费、不做案源分成、不碰刑事辩护。毕业注册公司后再补双备案、建商业律所合作网络。
+</div>
+
+<h3>未来一学期90天行动清单（按周，边上课边做）</h3>
+<p>这一学期的目标不是"做产品上线收钱"，而是<b>用最低成本验证校园真实需求、攒第一批真实问答、把比赛和大创的材料备好</b>。不注册公司、不请付费顾问、不碰收款。</p>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>周次</th><th>关键行动</th><th>负责角色</th><th>交付物</th></tr>
+<tr><td>第1周</td><td>拉核心小组、签《共同创始人协议》；联系法学院团委/法律诊所/法援社团谈合作；访谈20个同学/学长列"身边真实法律问题"清单</td><td>核心技术+法律专业成员</td><td>问题清单、合作意向、创始协议</td></tr>
+<tr><td>第1–2周</td><td>注册公众号/抖音/小红书（个人主体即可）；镜像国家法律法规数据库+人民法院案例库搭最小知识库</td><td>运营+核心技术</td><td>账号矩阵、最小知识库v0.1</td></tr>
+<tr><td>第2–3周</td><td>领取免费额度（硅基流动2000万tokens、火山50万、百炼300元券、GitHub Pack）；用Dify社区版/Coze跑通"兼职欠薪→能赔多少→仲裁申请书"首个闭环</td><td>核心技术</td><td>可演示RAG Demo</td></tr>
+<tr><td>第3–4周</td><td>做"赔偿/费用估算器"H5（N+1、租房押金、网贷利息、诉讼费）</td><td>核心技术</td><td>估算器H5/小程序页</td></tr>
+<tr><td>第4–6周</td><td>搭小程序/H5多轮咨询+法条大白话；<b>文书先出AI草稿，由内部法律成员人工复核后再交付（半自动兜底）</b></td><td>核心技术+法律专业成员</td><td>内测版+人工复核流程</td></tr>
+<tr><td>第5–8周</td><td>每日发1条普法短视频/图文；建200人种子群；<b>复杂咨询转微信群，由法律成员真人回复兜底</b></td><td>运营角色</td><td>粉丝与种子群、反馈记录</td></tr>
+<tr><td>第6–8周</td><td>与法律诊所/实践基地合作做案例库与合规评审；确定大赛指导教师</td><td>法律专业成员</td><td>指导教师、案例库雏形</td></tr>
+<tr><td>第7–9周</td><td>上disclaimer弹窗、引用标注、废止法条拦截；配好刑事/未成年/敏感场景熔断话术</td><td>核心技术+法律专业成员</td><td>合规兜底管线</td></tr>
+<tr><td>第9–10周</td><td>个人主体小程序/H5上线做功能验证（暂不收款）；启动大创申报书撰写</td><td>全员</td><td>MVP上线、大创初稿</td></tr>
+<tr><td>第10–12周</td><td>真实同学试用、跑通"咨询→估算→文书→真人兜底"闭环；同步写大赛BP</td><td>全员</td><td>真实问答数据、BP初稿</td></tr>
+<tr><td>第12周</td><td>复盘：真实用户数、问答量、回答采纳率、高频问题分布；定下学期大创与备赛计划</td><td>全员</td><td>90天复盘报告</td></tr>
+</table></div>
+
+<div class="callout"><b>半自动兜底（在校期质量底线）：</b>在校期没有律所、也不请付费顾问，靠"<b>AI出草稿 → 内部法律专业成员人工复核 → 才交付；复杂/拿不准的咨询直接转微信社群由真人回复</b>"来保证质量。这既合规（AI只做辅助、关键处有人把关），又把"真实问答+人工修正"沉淀成数据资产。</div>
+
+<div class="risk">
+<b>需持续盯防的三大风险（学生版）</b>
+①合规红线（自称工具、不碰刑事、不夸大宣传、只调已备案API）；②知识产权隔离（不用学校经费/服务器做私活，书面约定成果归团队）；③毕业散伙（股权与分工协议、代码与数据资产化、大四前把流程文档化）。
+</div>
+
+<h3>11.1 大四实习/毕设/升学冲击下的交接与公司化过渡</h3>
+<p>在校期最大的坎是大四：有人要考研、有人要去实习、有人要做毕设。提前按三件事安排，项目才不会在毕业时断掉。</p>
+<div class="tbl-wrap"><table class="compact">
+<tr><th>时间</th><th>安排</th></tr>
+<tr><td>大四上（2027秋）</td><td>一边冲大赛省赛/国赛，一边按学期承诺分配精力；升学者提前转为顾问/保留股权，不强求全职；代码、数据、流程全部文档化进Git</td></tr>
+<tr><td>大四下（2028春）</td><td>毕业节点做"去留决策"：有真实付费与比赛成绩的留下全职，其余转兼职顾问；此时注册个体工商户/有限公司，把个人主体产品平移到公司主体</td></tr>
+<tr><td>毕业过渡期</td><td>用比赛奖金+大创结余+郑州开业补贴启动；引入1位资深律师/行业合伙人补B端资源；把"在校验证的产品"升级为公司化运营，才开始谈天使</td></tr>
+</table></div>
+
+<h3>11.2 成功关键与失败模式（学生版）</h3>
+<p>学生团队跑通这个项目，同样要同时答对三道题，但尺度和全职公司完全不同。第一是<b>需求题</b>：不做"万能法律AI"，死死咬住同学身边的兼职欠薪、租房押金、校园贷、消费维权这几个最痛、最容易找到真实用户的场景，把规则和文书做到极致。第二是<b>信任题</b>：每条结论可溯源、每次输出带免责、敏感场景坚决转人工、文书有人工复核兜底——宁可少回答，不可乱回答。第三是<b>节奏题</b>：认清在校期的目标是"验证+攒数据+拿比赛背书"，不是"赚多少钱"，把不花钱的免费额度、导师网络、大创和比赛用足。</p>
+<p>学生团队特有的失败模式也要警惕：一是<b>技术理想化</b>——沉迷自部署、微调、自研模型，烧钱又分散精力，结果产品闭环没跑顺；二是<b>过早公司化/过早融资</b>——还没有真实数据就注册公司、谈天使，既过早稀释又背上运营成本；三是<b>不留后手</b>——代码只在一个人电脑里、成果用了学校资源、没签股权协议，一毕业就散伙甚至被学校主张知识产权。本报告给出的近零成本路径、知识产权隔离协议与毕业交接安排，正是为了同时规避这三类失败。</p>
+<p>最后要有清醒预期：模型本身不构成壁垒，免费额度人人能领，真正的壁垒是<b>校园/民生垂直场景的规则精度、导师与法援网络、以及"真实问题+人工验证答案"的数据飞轮</b>。这些都靠时间和免费积累，恰恰是学生最不缺、大公司最懒得做的事——用一学期跑通闭环、用在校期攒下别人抄不走的数据，就是学生团队最大的机会窗口。</p>
+</section>
+
+<section id="sources">
+<h2>附录：参考来源汇总</h2>
+<p style="font-size:13px;color:var(--muted)">以下来源由七份专项调研报告合并、去重后统一编号。正文上标 [n] 对应此处编号，点击可访问原文。分组为便于阅读（M=市场政策 / CN=国内竞品 / F=国外竞品 / T=技术 / D=数据 / C=合规 / B=商业落地）。</p>
+
+<h4>M · 市场与政策</h4>
+<ol>
+<li id="src-m1">最高人民法院工作报告（2025-03，十四届人大三次会议）— <a href="http://www.npc.gov.cn/npc/c2/kgfb/202503/t20250317_444305.html" target="_blank">npc.gov.cn</a></li>
+<li id="src-m2">全国法院2024年受理各类案件4600余万件（新华网）— <a href="http://www.news.cn/20250126/1f288bc460634f99807bce440b7d2e33/c.html" target="_blank">news.cn</a></li>
+<li id="src-m3">最高法公布2024年上半年司法审判主要数据 — <a href="https://www.court.gov.cn/zixun/xiangqing/438521.html" target="_blank">court.gov.cn</a></li>
+<li id="src-m5">国新办"高质量完成十四五规划"法治建设发布会实录 — <a href="http://www.scio.gov.cn/live/2025/37158/qwxz/202509/P020250909369820049678.pdf" target="_blank">scio.gov.cn</a></li>
+<li id="src-m6">司法部：我国律师达83万人、律所4.5万家 — <a href="https://www.moj.gov.cn/pub/sfbgw/sfbxwfbhzb/2025nsfbfbh/202509gzlwcsswgh/" target="_blank">moj.gov.cn</a></li>
+<li id="src-m7">全国登记在册经营主体达1.88亿户（中国政府网）— <a href="https://www.gov.cn/lianbo/bumen/202411/content_6985531.htm" target="_blank">gov.cn</a></li>
+<li id="src-m8">2024年登记在册经营主体1.89亿户（中国政府网）— <a href="https://www.gov.cn/lianbo/bumen/202501/content_6997839.htm" target="_blank">gov.cn</a></li>
+<li id="src-m10">2024年全国消协组织受理消费者投诉1761886件（中新网）— <a href="https://www.chinanews.com/cj/2025/02-06/10363954.shtml" target="_blank">chinanews.com</a></li>
+<li id="src-m11">2024年消费者投诉举报九大特点（市场监管总局）— <a href="https://www.samr.gov.cn/xw/zj/art/2025/art_353d3828c4ee4714be8c882.html" target="_blank">samr.gov.cn</a></li>
+<li id="src-m12">2025年法律服务行业发展趋势报告（东方财富研报）— <a href="https://pdf.dfcfw.com/pdf/H3_AP202505271679824008_1.pdf" target="_blank">dfcfw.com</a></li>
+<li id="src-m14" id="src14">《千问办公律师行业AI应用白皮书》发布（大众网）— <a href="http://finance.dzwww.com/cjsq/202609/t20260928_18163994.htm" target="_blank">dzwww.com</a></li>
+<li id="src-m15">智合AI完成数千万元A轮融资（中国日报网）— <a href="http://cn.chinadaily.com.cn/a/202608/19/WS6a856d6ea3105d3d7a27bd19.html" target="_blank">chinadaily.com.cn</a></li>
+<li id="src-m16">艾语智能完成两轮融资（经济参考网）— <a href="http://jjckb.xinhuanet.com/20251119/6024c2c987724a3fb922fd5763c4d70d/c.html" target="_blank">xinhuanet.com</a></li>
+<li id="src-m17">人民法院第六个五年改革纲要（2024–2028）— <a href="https://www.court.gov.cn/zixun/xiangqing/451191.html" target="_blank">court.gov.cn</a></li>
+<li id="src-m18">最高法发布《关于依法审理涉人工智能纠纷案件的意见》— <a href="https://www.court.gov.cn/zixun/xiangqing/511101.html" target="_blank">court.gov.cn</a></li>
+<li id="src-m19">全国首个数字法治AI整体解决方案"法仪大模型"发布（法治网）— <a href="http://m.legaldaily.com.cn/index_article/content/2026-09/08/content_9454097.htm" target="_blank">legaldaily.com.cn</a></li>
+<li id="src-m20">司法部：加快公共法律服务三大平台融合、推进"AI+普法" — <a href="https://www.moj.gov.cn/pub/sfbgw/sfbxwfbhzb/2026nsfbfbh/kjswwsfls20260914/tggz20260917/202609/t20260917_539874.html" target="_blank">moj.gov.cn</a></li>
+<li id="src-m21">修订后《保障中小企业款项支付条例》6月1日施行（中国政府网）— <a href="https://www.gov.cn/zhengce/202503/content_7015644.htm" target="_blank">gov.cn</a></li>
+<li id="src22">2024年中国AI法律工具行业投融资报告（豆丁网）— <a href="https://www.docin.com/touch_new/preview_new.do?id=4920545129" target="_blank">docin.com</a></li>
+</ol>
+
+<h4>CN · 国内竞品</h4>
+<ol>
+<li id="src-cn1">通义法睿官网 — <a href="https://tongyi.aliyun.com/farui/home" target="_blank">tongyi.aliyun.com</a></li>
+<li id="src-cn3">浙江财大法学院：通义法睿3500+法院落地讲座 — <a href="https://law.zufe.edu.cn/info/1976/23197.htm" target="_blank">zufe.edu.cn</a></li>
+<li id="src-cn4">法治网：百度推出法律AI应用法行宝 — <a href="http://www.legaldaily.com.cn/Village_ruled_by_law/content/2024-03/01/content_8967046.html" target="_blank">legaldaily.com.cn</a></li>
+<li id="src-cn8">新华网安徽：星火法律大模型2.0升级、星火法律助手发布 — <a href="http://www.ah.xinhuanet.com/20241025/554a8bceeb434c33ac023c417f9c6c74/c.html" target="_blank">xinhuanet.com</a></li>
+<li id="src-cn12">北大法宝智能产品大全 — <a href="https://ailab.pkulaw.cn/" target="_blank">ailab.pkulaw.cn</a></li>
+<li id="src-cn13">法治网：北大法律AI论坛发布法宝灵境及MCP生态 — <a href="http://www.legaldaily.com.cn/fxjy/content/2026-09/23/content_9464193.html" target="_blank">legaldaily.com.cn</a></li>
+<li id="src-cn15">威科集团法律解决方案（小威AI+）— <a href="https://www.wolterskluwer.cn/legal" target="_blank">wolterskluwer.cn</a></li>
+<li id="src-cn21">36氪：幂律智能完成近8000万元Pre-B轮融资 — <a href="https://m.36kr.com/p/2557236400937605" target="_blank">36kr.com</a></li>
+<li id="src-cn25">iCourt AlphaGPT官网 — <a href="https://www.icourt.cc/product/alphaGPT" target="_blank">icourt.cc</a></li>
+<li id="src-cn28">法天使Legal AI产品页 — <a href="https://www.fatianshi.cn/products/mylegalai" target="_blank">fatianshi.cn</a></li>
+<li id="src-cn29">秘塔MetaLaw介绍（个人版499元/年）— <a href="https://www.kuchuangai.com/gongju/bangong/wendang/92.html" target="_blank">kuchuangai.com</a></li>
+<li id="src-cn30">腾讯云ADP Legal Solution — <a href="https://adp.tencentcloud.com/solutions/legal" target="_blank">tencentcloud.com</a></li>
+<li id="src-cn32">湖北省司法厅：鄂州公共法律服务平台接入DeepSeek — <a href="https://sft.hubei.gov.cn/fbjd/szcz/ez/202502/t20250228_5558623.shtml" target="_blank">hubei.gov.cn</a></li>
+<li id="src-cn33">贵州日报："法管家"基于DeepSeek-R1蒸馏 — <a href="http://szb.eyesnews.cn/pad/cont/202504/08/content_149503.html" target="_blank">eyesnews.cn</a></li>
+</ol>
+
+<h4>F · 国外竞品</h4>
+<ol>
+<li id="src-f1">a16z领投Harvey 1.6亿美元（Harvey官方博客）— <a href="https://www.harvey.ai/blog/andreessen-horowitz-leads-dollar160m-investment-in-harvey" target="_blank">harvey.ai</a></li>
+<li id="src-f4">Harvey以80亿美元估值融资并发布Shared Spaces（Legal IT Insider）— <a href="https://legaltechnology.com/2025/12/04/harvey-raises-160m-at-8bn-valuation-launches-shared-spaces-interview/" target="_blank">legaltechnology.com</a></li>
+<li id="src-f8">CoCounsel定价演变（UsagePricing）— <a href="https://www.usagepricing.com/blueprint/cocounsel" target="_blank">usagepricing.com</a></li>
+<li id="src-f13">FTC Finalizes Order with DoNotPay（EIN Presswire）— <a href="https://www.einpresswire.com/article/785165788/ftc-finalizes-order-with-donotpay" target="_blank">einpresswire.com</a></li>
+<li id="src-f16">Spellbook完成5000万美元B轮（BetaKit）— <a href="https://betakit.com/spellbook-raises-50-million-usd-series-b-led-by-khosla-ventures/" target="_blank">betakit.com</a></li>
+<li id="src-f19">Legora完成1.5亿美元C轮（官方博客）— <a href="https://legora.com/blog/series-c" target="_blank">legora.com</a></li>
+<li id="src-f21">EvenUp E轮估值20亿（Sacra）— <a href="https://sacra.com/c/evenup/" target="_blank">sacra.com</a></li>
+<li id="src-f25">SpotDraft完成5400万美元B轮（官方）— <a href="https://www.spotdraft.com/blog/spotdraft-secures-54-million-to-lead-ai-contract-lifecycle-management" target="_blank">spotdraft.com</a></li>
+<li id="src-f30">Microsoft Copilot vs ChatGPT for Law Firms（AI Vortex）— <a href="https://www.aivortex.io/legal/compare/microsoft-copilot-vs-chatgpt-enterprise-law-firms/" target="_blank">aivortex.io</a></li>
+</ol>
+
+<h4>T · 技术架构</h4>
+<ol>
+<li id="src-t1">Harvey：Integrating Deep Research（官方博客）— <a href="https://www.harvey.ai/blog/integrating-deep-research-into-harvey" target="_blank">harvey.ai</a></li>
+<li id="src-t4">Harvey Tenet/Kimi K3开源底座后训练（腾讯新闻）— <a href="http://news.qq.com/rain/a/20260822A0BAF200" target="_blank">qq.com</a></li>
+<li id="src-t13">MSLR：Benchmarking Multi-Step Legal Reasoning / IRAC（arXiv）— <a href="https://arxiv.org/html/2511.07979v3" target="_blank">arxiv.org</a></li>
+<li id="src-t14">Unilaw-R1: Legal Reasoning with RL（arXiv）— <a href="https://arxiv.org/html/2510.10072v1" target="_blank">arxiv.org</a></li>
+<li id="src-t14b">Falkor-IRAC: Graph-Constrained Generation（arXiv）— <a href="https://arxiv.org/pdf/2605.14665v2" target="_blank">arxiv.org</a></li>
+<li id="src-t17">MinerU：面向Agent和RAG的智能文档解析 — <a href="https://mineru.net/" target="_blank">mineru.net</a></li>
+<li id="src-t18">PaddleOCR-VL 1.5 印章识别/异形框 — <a href="https://www.paddleocr.ai/latest/version3.x/pipeline_usage/PaddleOCR-VL.html" target="_blank">paddleocr.ai</a></li>
+<li id="src-t21">Vector Database Benchmarks 2025（Inductivee）— <a href="https://inductivee.com/blog/vector-database-performance-benchmarks-2025" target="_blank">inductivee.com</a></li>
+<li id="src-t22">SGLang vs vLLM 完整对比（LocalAIMaster）— <a href="https://localaimaster.com/blog/sglang-vs-vllm-comparison" target="_blank">localaimaster.com</a></li>
+<li id="src-t24">什么是MCP？与Function Calling关系（JavaGuide）— <a href="https://javaguide.cn/ai/agent/mcp.html" target="_blank">javaguide.cn</a></li>
+</ol>
+
+<h4>D · 数据体系</h4>
+<ol>
+<li id="src-d1">国家法律法规数据库 — <a href="https://flk.npc.gov.cn/" target="_blank">flk.npc.gov.cn</a></li>
+<li id="src-d4">人民法院案例库正式上线（最高法）— <a href="https://www.court.gov.cn/zixun/xiangqing/426222.html" target="_blank">court.gov.cn</a></li>
+<li id="src-d5">人民法院案例库收录突破5000件（最高法）— <a href="https://www.court.gov.cn/zixun/xiangqing/471041.html" target="_blank">court.gov.cn</a></li>
+<li id="src-d7">裁判文书上网数量变化（中新网）— <a href="https://www.chinanews.com.cn/sh/2026/01-16/10553066.shtml" target="_blank">chinanews.com.cn</a></li>
+<li id="src-d9">现行有效法律目录311件（中国人大网PDF）— <a href="http://www.npc.gov.cn:80/npc/c2597/c5854/c5855/202605/P020260511555595542525.pdf" target="_blank">npc.gov.cn</a></li>
+<li id="src-d10">2024年备案审查工作报告解读（省级库38万件）— <a href="http://www.npc.gov.cn/c2/c30834/202502/t20250207_442715.html" target="_blank">npc.gov.cn</a></li>
+<li id="src-d11">12309中国检察网 — <a href="https://www.12309.gov.cn/" target="_blank">12309.gov.cn</a></li>
+<li id="src-d14ref">麦某波诉法某科技案（已公开个人信息商业化侵权）— <a href="https://www.court.gov.cn/zixun/xiangqing/471161.html" target="_blank">court.gov.cn</a></li>
+<li id="src-d13">中国执行信息公开网（失信被执行人实时）— <a href="http://zxgk.court.gov.cn/" target="_blank">zxgk.court.gov.cn</a></li>
+<li id="src-d17">DISC-LawLLM论文（arXiv）— <a href="https://arxiv.org/pdf/2309.11325v2.pdf" target="_blank">arxiv.org</a></li>
+<li id="src-d20">CAIL2018数据集论文（arXiv）— <a href="https://arxiv.org/pdf/1807.02478" target="_blank">arxiv.org</a></li>
+<li id="src-d21">北大法宝高校采购标书（收录规模/报价）— <a href="https://news.sxufe.edu.cn/info/1023/20654.htm" target="_blank">sxufe.edu.cn</a></li>
+<li id="src-d23">企查查开放平台API — <a href="https://openapi.qcc.com/dataApi/2001" target="_blank">qcc.com</a></li>
+<li id="src-d26">Neo4j：从法律文档到知识图谱 — <a href="https://neo4j.com/blog/developer/from-legal-documents-to-knowledge-graphs/" target="_blank">neo4j.com</a></li>
+<li id="src-d28">我国现行有效法律310件、地方性法规超1.4万件（司法部）— <a href="https://www.moj.gov.cn/pub/sfbgw/jgsz/jgszzsdw/zsdwzwfzyjzx/zffzyjzxxwdt/202601/t20260109_530403.html" target="_blank">moj.gov.cn</a></li>
+</ol>
+
+<h4>C · 合规风险</h4>
+<ol>
+<li id="src-c1">《生成式人工智能服务管理暂行办法》全文（国家网信办）— <a href="https://www.cac.gov.cn/2023-07/13/c_1690898327029107.htm" target="_blank">cac.gov.cn</a></li>
+<li id="src-c4">国家网信办：2026年7–8月生成式AI服务备案公告（累计1112款）— <a href="https://www.cac.gov.cn/2026-09/14/c_1791136833136332.htm" target="_blank">cac.gov.cn</a></li>
+<li id="src-c7">最高法《关于依法审理涉人工智能纠纷案件的意见》新闻发布 — <a href="https://www.court.gov.cn/zixun/xiangqing/511101.html" target="_blank">court.gov.cn</a></li>
+<li id="src-c9">《中华人民共和国律师法》（中国人大网）— <a href="http://www.npc.gov.cn/npc//c2/c30834/201905/t20190521_278153.html" target="_blank">npc.gov.cn</a></li>
+<li id="src-c18">财新周刊：网推"律所"乱象透视 — <a href="https://weekly.caixin.com/2026-05-09/102442269.html" target="_blank">caixin.com</a></li>
+<li id="src-c23">法治网：AI"幻觉"侵权纠纷——技术与责任边界 — <a href="http://www.legaldaily.com.cn/Company/content/2026-05/06/content_9384006.html" target="_blank">legaldaily.com.cn</a></li>
+</ol>
+
+<h4>B · 产品与商业落地</h4>
+<ol>
+<li id="src-b2">法天使模板定价规则 — <a href="https://www.fatianshi.cn/Article/View?id=ccb4ac39-4a33-4808-95fb-1c7727285de4" target="_blank">fatianshi.cn</a></li>
+<li id="src-b3">36氪：17家大模型厂商最新定价 — <a href="https://36kr.com/p/3435332170124929" target="_blank">36kr.com</a></li>
+<li id="src-b6">36氪：法律AI平台JurisAI寻求种子轮 — <a href="https://36kr.com/p/3532678291905672" target="_blank">36kr.com</a></li>
+<li id="src-b7">36氪：智能小律通0.5元咨询 — <a href="https://m.36kr.com/p/3657667366200193" target="_blank">36kr.com</a></li>
+<li id="src-b8">幂律智能吾律产品定价页 — <a href="https://www.milvzn.com/wuyouwulv" target="_blank">milvzn.com</a></li>
+<li id="src-b12">临沂市律师协会收费标准（2024-05）— <a href="https://lsxh.linyi.cn/__local/E/9D/DB/A1CCB14DA37FD74A9ED6F5D04F3_56E66AE2_ACD0C.pdf" target="_blank">linyi.cn</a></li>
+<li id="src-b13">职友集：郑州算法工程师薪资 — <a href="https://m.jobui.com/salary/zhengzhou-suanfa/" target="_blank">jobui.com</a></li>
+</ol>
+</section>
+  </div>
+</main>
+
+<footer>
+  <div class="fin">
+    <p><b>法律AI智能体架构调研与落地决策报告 · 学生团队版 V3 · 2026年9月（郑州）</b></p>
+    <p>本报告在 V1（8人团队、首年200万预算版）与 V2（学生近零成本版）基础上，对视觉与信息架构进行重制；市场、竞品、技术、数据、合规核心结论沿用七份专项调研，数据来源于公开政府文件、权威媒体、企业官网与行业报告，已尽力交叉核对。</p>
+    <p class="disc"><b>免责声明：</b>本报告为创业与商业技术调研文档，仅供团队内部决策参考，<u>不构成任何法律意见、法律建议或律师代理关系</u>。文中涉及的合规要求、补贴政策与比赛时间安排以最新官方发布及主管部门解释为准，具体落地前请咨询执业律师与学校创业指导部门。</p>
+  </div>
+</footer>
+
+<button id="toTop" aria-label="回到顶部">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script>
+(function(){
+  "use strict";
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section'));
+  var CHAPTER_KICKERS = [
+    "Executive Summary", "Market & Demand", "Competitive Landscape",
+    "Technical Architecture", "Data System", "Product Blueprint",
+    "Compliance & Risk", "Business Model", "Roadmap & Resource Estimate",
+    "Long-term Evolution", "Recommendation & 90-Day Action", "Appendix · Sources"
+  ];
+  /* ---------- 1. 为 h3 分配 id ---------- */
+  sections.forEach(function(sec){
+    var h3s = sec.querySelectorAll(':scope > h3');
+    h3s.forEach(function(h3,i){
+      if(!h3.id) h3.id = sec.id + '-h3-' + (i+1);
+    });
+  });
+  /* ---------- 2. 章节头（大编号 + 英文 kicker） ---------- */
+  sections.forEach(function(sec, idx){
+    var h2 = sec.querySelector('h2');
+    if(!h2) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'chap-head';
+    var num = (idx < 11) ? ('0' + (idx+1)).slice(-2) : 'APP';
+    h2.parentNode.insertBefore(wrap, h2);
+    wrap.insertAdjacentHTML('afterbegin',
+      '<div class="cnum">'+num+'</div><div class="chap-text"><span class="ckick">' + (CHAPTER_KICKERS[idx]||'') + '</span></div>');
+    wrap.querySelector('.chap-text').appendChild(h2);
+    /* 本章小节 */
+    var h3s = sec.querySelectorAll(':scope > h3');
+    if(h3s.length){
+      var box = document.createElement('div');
+      box.className = 'chap-toc';
+      var html = '<div class="tt">本章小节</div>';
+      h3s.forEach(function(h3){
+        html += '<a href="#'+h3.id+'">'+h3.textContent.replace(/^\d+(\.\d+)*\s*/,'')+'</a>';
+      });
+      box.innerHTML = html;
+      h2.parentNode.insertBefore(box, h2.nextSibling);
+    }
+  });
+  /* ---------- 3. 目录树 ---------- */
+  var tocnav = document.getElementById('tocnav');
+  sections.forEach(function(sec, idx){
+    var h2 = sec.querySelector('h2');
+    var title = h2 ? h2.textContent.trim() : sec.id;
+    var tnum = (idx<11) ? ('0'+(idx+1)).slice(-2) : '附';
+    var div = document.createElement('div');
+    div.className = 'toc-chap';
+    div.dataset.target = sec.id;
+    var h3s = sec.querySelectorAll(':scope > h3');
+    var sub = '';
+    if(h3s.length){
+      sub = '<div class="toc-sub">';
+      h3s.forEach(function(h3){
+        sub += '<a href="#'+h3.id+'">'+h3.textContent.trim()+'</a>';
+      });
+      sub += '</div>';
+    }
+    div.innerHTML = '<div class="toc-row"><a class="toc-link" href="#'+sec.id+'"><span class="tnum">'+tnum+'</span>'+title.replace(/^[一二三四五六七八九十]+、/,'')+'</a>'
+      + (h3s.length ? '<button class="toc-toggle" aria-label="展开">▾</button>' : '') + '</div>' + sub;
+    tocnav.appendChild(div);
+    if(h3s.length){
+      div.querySelector('.toc-toggle').addEventListener('click', function(){
+        div.classList.toggle('open');
+      });
+    }
+  });
+  /* 默认展开第一章 */
+  var firstOpen = tocnav.querySelector('.toc-chap');
+  if(firstOpen) firstOpen.classList.add('open');
+  /* ---------- 4. 表格 colgroup（fixed 布局，列宽总和100%） ---------- */
+  document.querySelectorAll('table').forEach(function(tbl){
+    if(tbl.querySelector('colgroup')) return;
+    var firstRow = tbl.querySelector('tr');
+    var n = firstRow ? firstRow.children.length : 1;
+    if(!n) n = 1;
+    var cg = document.createElement('colgroup');
+    for(var i=0;i<n;i++){
+      var c = document.createElement('col');
+      c.style.width = (100/n).toFixed(2)+'%';
+      cg.appendChild(c);
+    }
+    tbl.insertBefore(cg, tbl.firstChild);
+  });
+  /* ---------- 5. Callout 图标 + danger 判定 ---------- */
+  var ICONS = {
+    note:'<svg class="cio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5v.01"/></svg>',
+    tip:'<svg class="cio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>',
+    warn:'<svg class="cio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L2 20h20L12 3z"/><path d="M12 10v4M12 17.5v.01"/></svg>',
+    danger:'<svg class="cio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9l6 6M15 9l-6 6"/></svg>'
+  };
+  document.querySelectorAll('.callout,.recommend,.risk').forEach(function(el){
+    var kind = el.classList.contains('recommend') ? 'tip' : (el.classList.contains('risk') ? 'warn' : 'note');
+    var txt = el.textContent;
+    if(/红线|生死线|禁止|熔断|必须研究的反面|DoNotPay/.test(txt) && el.classList.contains('risk')){
+      el.classList.add('danger'); kind = 'danger';
+    }
+    el.insertAdjacentHTML('afterbegin', ICONS[kind]);
+  });
+  /* ---------- 6. 上标引用解析为外链新窗口 ---------- */
+  document.querySelectorAll('sup a[href^="#src"]').forEach(function(a){
+    var id = a.getAttribute('href').slice(1);
+    var li = document.getElementById(id);
+    if(li){
+      var ext = li.querySelector('a[href^="http"]');
+      if(ext){
+        a.setAttribute('href', ext.getAttribute('href'));
+        a.setAttribute('target','_blank');
+        a.setAttribute('rel','noopener');
+      }
+    }
+  });
+  /* ---------- 7. Mermaid 图注 ---------- */
+  var figs = document.querySelectorAll('.mermaid');
+  figs.forEach(function(el, i){
+    var fig = document.createElement('figure');
+    fig.className = 'diagram';
+    el.parentNode.insertBefore(fig, el);
+    fig.appendChild(el);
+    var cap = document.createElement('figcaption');
+    var sec = el.closest('section');
+    var h3list = sec ? Array.prototype.slice.call(sec.querySelectorAll(':scope > h3')) : [];
+    var label = '';
+    for(var j=h3list.length-1;j>=0;j--){
+      if(h3list[j].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING){
+        label = h3list[j].textContent.trim(); break;
+      }
+    }
+    cap.innerHTML = '<b>图 '+(i+1)+'</b>'+label;
+    fig.appendChild(cap);
+  });
+  /* ---------- 8. s10.1 四阶段时间线（数据取自 V2 原表，另作可视化） ---------- */
+  var tlData = [
+    ['现在–毕业\n0–1.5年','在校验证期','不烧钱做出MVP、拿到真实用户与问答数据、靠比赛拿背书奖金','MVP上线 · 互联网+省赛/国赛获奖 · 大创立项 · 注册用户破万 · 现金支出0–数万元'],
+    ['毕业–1.5年\n1.5–3年','毕业过渡期','公司化、跑通付费闭环、决定主攻方向','注册主体 · 应用登记/必要备案 · 首笔真实付费 · 种子/天使'],
+    ['毕业后3–5年','成长期','产品线成型、区域扩张、自部署模型提效','月收入百万级 · B端SaaS数十家 · 团队10–30人'],
+    ['5年以上','远期平台期','平台化/生态化，或成为大厂/律所集团生态伙伴','行业级知识库与数据网络 · 具备并购或被并购价值']
+  ];
+  var h3ten = Array.prototype.slice.call(document.querySelectorAll('section#s10 h3')).filter(function(h){return h.textContent.indexOf('四阶段')>=0;})[0];
+  if(h3ten){
+    var wrap = document.createElement('div');
+    wrap.className = 'tl';
+    var html = '';
+    tlData.forEach(function(r){
+      html += '<div class="tl-item"><div class="tl-time">'+r[0].replace(/\n/g,'<br>')+'</div><div class="tl-axis"><span class="tl-dot"></span></div><div class="tl-body"><h5>'+r[1]+'</h5><p>'+r[2]+'</p><div class="tagline">'+r[3]+'</div></div></div>';
+    });
+    wrap.innerHTML = html;
+    h3ten.parentNode.insertBefore(wrap, h3ten.nextSibling);
+  }
+  /* ---------- 9. 进度条 / 回到顶部 ---------- */
+  var prog = document.getElementById('progress'), pct = document.getElementById('progressPct'),
+      toTop = document.getElementById('toTop');
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var p = max>0 ? (h.scrollTop/max*100) : 0;
+    prog.style.width = p + '%';
+    pct.textContent = Math.round(p) + '%';
+    toTop.classList.toggle('show', h.scrollTop > 600);
+  }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  toTop.addEventListener('click', function(){window.scrollTo({top:0,behavior:'smooth'});});
+  /* ---------- 10. 移动端抽屉 ---------- */
+  var body = document.body, scrim = document.getElementById('scrim');
+  document.getElementById('hamburger').addEventListener('click', function(){body.classList.add('drawer-open');});
+  scrim.addEventListener('click', function(){body.classList.remove('drawer-open');});
+  tocnav.addEventListener('click', function(e){
+    if(e.target.closest('a')) body.classList.remove('drawer-open');
+  });
+  /* ---------- 11. ScrollSpy（基于滚动位置的确定性计算） ---------- */
+  var spyChaps = [];
+  sections.forEach(function(sec){
+    var chapLink = tocnav.querySelector('.toc-chap[data-target="'+sec.id+'"] > .toc-row .toc-link');
+    var subs = [];
+    sec.querySelectorAll(':scope > h3').forEach(function(h3){
+      subs.push({el:h3, link:tocnav.querySelector('.toc-sub a[href="#'+h3.id+'"]')});
+    });
+    spyChaps.push({sec:sec, chapLink:chapLink, subs:subs});
+  });
+  function updateSpy(){
+    var probe = window.scrollY + window.innerHeight*0.22;
+    var curChap = spyChaps[0], curSub = null;
+    spyChaps.forEach(function(c){
+      if(c.sec.offsetTop <= probe) curChap = c;
+      c.subs.forEach(function(s){ if(s.el.offsetTop <= probe) curSub = s; });
+    });
+    spyChaps.forEach(function(c){
+      if(c.chapLink) c.chapLink.classList.toggle('active', c===curChap);
+      c.subs.forEach(function(s){ if(s.link) s.link.classList.toggle('active', s===curSub); });
+    });
+    if(curChap && curChap.chapLink){
+      var ch = curChap.chapLink.closest('.toc-chap');
+      if(ch) ch.classList.add('open');
+    }
+  }
+  var spyTicking=false;
+  window.addEventListener('scroll', function(){
+    if(spyTicking) return; spyTicking=true;
+    requestAnimationFrame(function(){ updateSpy(); spyTicking=false; });
+  }, {passive:true});
+  updateSpy();
+  /* ---------- 12. 目录过滤 ---------- */
+  document.getElementById('tocFilter').addEventListener('input', function(){
+    var q = this.value.trim().toLowerCase();
+    tocnav.querySelectorAll('.toc-chap').forEach(function(ch){
+      var txt = ch.textContent.toLowerCase();
+      ch.style.display = (!q || txt.indexOf(q)>=0) ? '' : 'none';
+      if(q) ch.classList.add('open');
+    });
+  });
+  /* ---------- 13. 上一章/下一章 ---------- */
+  var pager = document.createElement('div');
+  pager.className = 'pager';
+  var prev = sections[0].id, nextSec = sections[1] ? sections[1].id : null;
+  var prevH2 = sections[0].querySelector('h2');
+  function titleOf(sec){ var h=sec.querySelector('h2'); return h?h.textContent.trim().replace(/^[一二三四五六七八九十]+、/,''):sec.id; }
+  var pagerHtml = '';
+  for(var i=0;i<sections.length;i++){
+    var left = i>0 ? '<a class="prev" href="#'+sections[i-1].id+'"><span class="pl">上一章</span><span class="pt">'+titleOf(sections[i-1])+'</span></a>' : '<span></span>';
+    var right = i<sections.length-1 ? '<a class="next" href="'+('#'+sections[i+1].id)+'"><span class="pl">下一章</span><span class="pt">'+titleOf(sections[i+1])+'</span></a>' : '<span></span>';
+    sections[i].insertAdjacentHTML('beforeend','<div class="pager">'+left+right+'</div>');
+  }
+  /* ---------- 14. 深色模式 ---------- */
+  function mermaidTheme(dark){
+    return {
+      theme:'base', startOnLoad:false,
+      themeVariables: dark ? {
+        primaryColor:'#22344a',primaryTextColor:'#e6edf6',primaryBorderColor:'#d8ac52',
+        lineColor:'#7e8da3',tertiaryColor:'#1a2736',fontSize:'13px'
+      } : {
+        primaryColor:'#eef3f8',primaryTextColor:'#1b2634',primaryBorderColor:'#2b4a6f',
+        lineColor:'#5a7a96',tertiaryColor:'#f4f5f1',fontSize:'13px'
+      }
+    };
+  }
+  function applyTheme(dark){
+    document.documentElement.setAttribute('data-theme', dark?'dark':'light');
+    var label = dark ? '浅色模式' : '深色模式';
+    var b1 = document.getElementById('themeBtn'); if(b1) b1.textContent = label;
+    var b2 = document.getElementById('themeBtn2'); if(b2) b2.textContent = dark?'浅色':'深色';
+    try{ localStorage.setItem('v3theme', dark?'dark':'light'); }catch(e){}
+    if(window.mermaid){
+      try{
+        document.querySelectorAll('.mermaid').forEach(function(el){
+          el.removeAttribute('data-processed');
+          var s = el.querySelector('svg'); if(s) s.remove();
+        });
+        mermaid.initialize(mermaidTheme(dark)); mermaid.run();
+      }catch(e){}
+    }
+  }
+  var saved='';
+  try{ saved = localStorage.getItem('v3theme'); }catch(e){}
+  var dark = saved ? saved==='dark' : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.getElementById('themeBtn').addEventListener('click', function(){
+    applyTheme(document.documentElement.getAttribute('data-theme')!=='dark');
+  });
+  document.getElementById('themeBtn2').addEventListener('click', function(){
+    applyTheme(document.documentElement.getAttribute('data-theme')!=='dark');
+  });
+  applyTheme(dark);
+  /* ---------- 15. Mermaid 降级（正常渲染由 applyTheme 完成） ---------- */
+  function showFallback(){
+    document.querySelectorAll('.mermaid').forEach(function(el){
+      if(el.querySelector('svg')) return;
+      var pre = document.createElement('pre');
+      pre.className='mermaid-fallback';
+      pre.textContent = '[图表库未加载，以下为原始图代码]\n\n' + el.textContent;
+      el.innerHTML=''; el.appendChild(pre);
+    });
+  }
+  if(!window.mermaid){ setTimeout(showFallback, 1500); }
+})();
+</script>
+</body>
+</html>
